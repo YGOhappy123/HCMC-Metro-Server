@@ -11,11 +11,11 @@ const app = express()
 app.use(express.json())
 
 // Route handlers
-const API_PREFIX = '/api/v1'
+const API_PATH_BASE = '/api/v1'
 const baseRouter = express.Router()
 
 baseRouter.use('/auth', authRoutes)
-app.use(API_PREFIX, baseRouter)
+app.use(API_PATH_BASE, baseRouter)
 
 // DB connection and server initialization
 const startServer = async () => {
@@ -28,7 +28,7 @@ const startServer = async () => {
             console.log(`🚀 Server running on port: ${PORT}`)
         })
     } catch (error) {
-        console.error('❌ DB Connection Error:', error)
+        console.error('❌ Cannot connect to database. Error:', error)
         process.exit(1)
     }
 }
