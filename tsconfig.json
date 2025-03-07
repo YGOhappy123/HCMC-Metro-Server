@@ -6,7 +6,9 @@
         "esModuleInterop": true,
         "resolveJsonModule": true,
         "moduleResolution": "node",
-        // "baseUrl": ".",
+        "target": "es6",
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
         "paths": {
             "@/*": ["./src/*"]
         }
