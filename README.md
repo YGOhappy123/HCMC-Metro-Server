@@ -72,6 +72,16 @@ Before running the project, make sure to set up the environment variables:
 
     If you are a collaborator on this project, please contact the project owner to obtain the values for the environment variables.
 
+4. Apply the migrations to create the necessary database tables. Use the following command in the terminal:
+
+    ```bash
+    npm run migrations
+    ```
+
+    This command will apply the existing migrations to the specified database, ensuring that the required tables are created.
+
+    **Note:** You have to have the database created on your MySQL server before making any connections or migrations with sequelize.
+
 ## Development
 
 To start the development server, use:

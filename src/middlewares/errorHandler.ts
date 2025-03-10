@@ -8,7 +8,7 @@ const errorHandler = (error: any, req: Request, res: Response, next: NextFunctio
             res.status(422).json({ message: errorMessage.DATA_VALIDATION_FAILED })
         }
 
-        const status = error.statusCode || 500
+        const status = error.status || error.statusCode || 500
         const message = error.message || errorMessage.INTERNAL_SERVER_ERROR
 
         res.status(status).json({ message: message })

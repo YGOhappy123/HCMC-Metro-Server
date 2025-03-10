@@ -1,7 +1,7 @@
-import jwt from 'jsonwebtoken'
-import errorMessage from '@/configs/errorMessage'
 import { UserRole } from '@/models/Account'
 import { HttpException } from '@/errors/HttpException'
+import jwt, { JwtPayload } from 'jsonwebtoken'
+import errorMessage from '@/configs/errorMessage'
 
 const ACCESS_TOKEN_LIFE = '1h'
 const REFRESH_TOKEN_LIFE = '7d'
@@ -32,7 +32,7 @@ export const generateResetPasswordToken = ({ email, type = 'forgot' }: { email: 
 export const verifyAccessToken = (accessToken: string) => {
     try {
         const decodedToken = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET!)
-        return decodedToken
+        return decodedToken as JwtPayload
     } catch (error) {
         throw new HttpException(401, errorMessage.INVALID_TOKEN)
     }
@@ -41,7 +41,7 @@ export const verifyAccessToken = (accessToken: string) => {
 export const verifyRefreshToken = (refreshToken: string) => {
     try {
         const decodedToken = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET!)
-        return decodedToken
+        return decodedToken as JwtPayload
     } catch (error) {
         throw new HttpException(401, errorMessage.INVALID_TOKEN)
     }
@@ -50,7 +50,7 @@ export const verifyRefreshToken = (refreshToken: string) => {
 export const verifyResetPasswordToken = (resetPasswordToken: string) => {
     try {
         const decodedToken = jwt.verify(resetPasswordToken, process.env.RESET_PASSWORD_TOKEN_SECRET!)
-        return decodedToken
+        return decodedToken as JwtPayload
     } catch (error) {
         throw new HttpException(401, errorMessage.INVALID_TOKEN)
     }

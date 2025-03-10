@@ -34,15 +34,13 @@ const startServer = async () => {
         await sequelizeIns.authenticate()
         pinoLogger.info('[DATABASE] Connected to MySQL database')
 
-        await sequelizeIns.sync({ alter: true })
-        pinoLogger.info('[DATABASE] Synchronized changes to MySQL database')
-
-        const PORT = process.env.PORT || 5000
-        app.listen(PORT, () => {
+        const PORT = Number(process.env.PORT) || 5000
+        const HOST = '0.0.0.0'
+        app.listen(PORT, HOST, () => {
             pinoLogger.info(`[SERVER] Server running on port: ${PORT}`)
         })
     } catch (error) {
-        console.error('❌ Cannot connect to database. Error:', error)
+        pinoLogger.error('[ERROR] Cannot connect to database')
         process.exit(1)
     }
 }
