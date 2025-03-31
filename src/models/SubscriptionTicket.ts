@@ -20,14 +20,14 @@ export default class SubscriptionTicket extends Model<SubscriptionTicketAttribut
         primaryKey: true,
         autoIncrement: true
     })
-    declare ticketId: number
+    declare subscriptionTicketId: number
 
     @Column({
         type: DataType.STRING,
         unique: true,
         allowNull: false
     })
-    declare name: string
+    declare ticketName: string
 
     @Column({
         type: DataType.TEXT

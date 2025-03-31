@@ -1,26 +1,26 @@
 import { Optional } from 'sequelize'
 import { BelongsTo, Column, DataType, ForeignKey, Model, Table } from 'sequelize-typescript'
-import { PaymentMethod } from '@/models/Payment'
+import { PaymentMethodIncludingSfc } from '@/enums/ticket'
 import Admin from '@/models/Admin'
 import Station from '@/models/Station'
 
-interface SingleJourneyPriceAttributes {
+interface SingleJourneyTicketPriceAttributes {
     priceId: number
     firstStationId: number
     secondStationId: number
-    paymentMethod: PaymentMethod
+    paymentMethod: PaymentMethodIncludingSfc
     price: number
     updatedAt: Date
     updatedBy: number
 }
 
-type CreateSingleJourneyPriceAttributes = Optional<SingleJourneyPriceAttributes, 'priceId' | 'updatedAt'>
+type CreateSingleJourneyTicketPriceAttributes = Optional<SingleJourneyTicketPriceAttributes, 'priceId' | 'updatedAt'>
 
 @Table({
-    tableName: 'single_journey_price',
+    tableName: 'single_journey_ticket_price',
     timestamps: false
 })
-export default class SingleJourneyPrice extends Model<SingleJourneyPriceAttributes, CreateSingleJourneyPriceAttributes> {
+export default class SingleJourneyTicketPrice extends Model<SingleJourneyTicketPriceAttributes, CreateSingleJourneyTicketPriceAttributes> {
     @Column({
         type: DataType.INTEGER,
         primaryKey: true,
@@ -49,11 +49,11 @@ export default class SingleJourneyPrice extends Model<SingleJourneyPriceAttribut
     declare secondStation: Station
 
     @Column({
-        type: DataType.ENUM(...Object.values(PaymentMethod)),
+        type: DataType.ENUM(...Object.values(PaymentMethodIncludingSfc)),
         allowNull: false,
-        defaultValue: PaymentMethod.CASH
+        defaultValue: PaymentMethodIncludingSfc.CASH
     })
-    declare paymentMethod: PaymentMethod
+    declare paymentMethod: PaymentMethodIncludingSfc
 
     @Column({
         type: DataType.DOUBLE,

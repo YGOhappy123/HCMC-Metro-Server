@@ -2,13 +2,8 @@ import * as bcrypt from 'bcrypt'
 import { Optional } from 'sequelize'
 import { Column, DataType, Model, Table } from 'sequelize-typescript'
 import { HttpException } from '@/errors/HttpException'
+import { UserRole } from '@/enums/auth'
 import errorMessage from '@/configs/errorMessage'
-
-export enum UserRole {
-    CUSTOMER = 'customer',
-    STAFF = 'staff',
-    ADMIN = 'admin'
-}
 
 interface AccountAttributes {
     accountId: number

@@ -2,27 +2,21 @@ import { Optional } from 'sequelize'
 import { BelongsTo, Column, DataType, ForeignKey, Model, Table } from 'sequelize-typescript'
 import Station from '@/models/Station'
 
-export enum SfcCardStatus {
-    ACTIVE = 'active',
-    ONBOARD = 'onboard',
-    INACTIVE = 'inactive'
-}
-
 interface SfcCardAttributes {
     sfcCardId: number
     code: string
     issuedStationId: number
     balance: number
-    status: SfcCardStatus
+    isActive: boolean
     issuedAt: Date
 }
 
-type CreateSfcCardAttributes = Optional<SfcCardAttributes, 'sfcCardId' | 'status'>
+type CreateSfcCardAttributes = Optional<SfcCardAttributes, 'sfcCardId' | 'isActive'>
 
-const CARD_CODE_LENGTH_RANGE = [16, 16] as const
+const SFC_CARD_CODE_LENGTH_RANGE = [16, 16] as const
 
 @Table({
-    tableName: 'sfc_card',
+    tableName: 'issued_sfc_card',
     timestamps: false
 })
 export default class SfcCard extends Model<SfcCardAttributes, CreateSfcCardAttributes> {
@@ -37,7 +31,7 @@ export default class SfcCard extends Model<SfcCardAttributes, CreateSfcCardAttri
         type: DataType.STRING,
         unique: true,
         allowNull: false,
-        validate: { len: CARD_CODE_LENGTH_RANGE }
+        validate: { len: SFC_CARD_CODE_LENGTH_RANGE }
     })
     declare code: string
 
@@ -59,11 +53,11 @@ export default class SfcCard extends Model<SfcCardAttributes, CreateSfcCardAttri
     declare balance: number
 
     @Column({
-        type: DataType.ENUM(...Object.values(SfcCardStatus)),
+        type: DataType.BOOLEAN,
         allowNull: false,
-        defaultValue: SfcCardStatus.ACTIVE
+        defaultValue: true
     })
-    declare status: SfcCardStatus
+    declare isActive: boolean
 
     @Column({
         type: DataType.DATE,
