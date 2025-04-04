@@ -1,4 +1,4 @@
-import { UserRole } from '@/models/Account'
+import { UserRole } from '@/enums/auth'
 import { HttpException } from '@/errors/HttpException'
 import jwt, { JwtPayload } from 'jsonwebtoken'
 import errorMessage from '@/configs/errorMessage'

@@ -1,5 +1,5 @@
+import { UserRole } from '@/enums/auth'
 import { Request } from 'express'
-import { UserRole } from '@/models/Account'
 
 export interface RequestWithAuthData extends Request {
     auth?: AuthJwtPayload

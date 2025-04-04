@@ -1,5 +1,5 @@
 import { Response, NextFunction } from 'express'
-import { UserRole } from '@/models/Account'
+import { UserRole } from '@/enums/auth'
 import { HttpException } from '@/errors/HttpException'
 import { verifyAccessToken } from '@/utils/jwtHelpers'
 import { AuthJwtPayload, RequestWithAuthData } from '@/interfaces/auth'
