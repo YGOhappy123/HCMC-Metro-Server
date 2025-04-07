@@ -7,7 +7,6 @@ interface LineAttributes {
     lineId: number
     lineName: string
     distance: number
-    estimatedTravelTime: number
 }
 
 type CreateLineAttributes = Optional<LineAttributes, 'lineId'>
@@ -36,12 +35,6 @@ export default class Line extends Model<LineAttributes, CreateLineAttributes> {
         allowNull: false
     })
     declare distance: number
-
-    @Column({
-        type: DataType.DOUBLE,
-        allowNull: false
-    })
-    declare estimatedTravelTime: number
 
     @BelongsToMany(() => Station, () => LineStation)
     declare stations: Station[]
