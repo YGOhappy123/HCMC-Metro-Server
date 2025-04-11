@@ -10,9 +10,10 @@ interface CustomerAttributes {
     avatar: string
     createdAt: Date
     accountId: number
+    account?: Account
 }
 
-type CreateCustomerAttributes = Optional<CustomerAttributes, 'customerId' | 'email' | 'phoneNumber' | 'avatar' | 'createdAt'>
+type CreateCustomerAttributes = Optional<CustomerAttributes, 'customerId' | 'email' | 'phoneNumber' | 'avatar' | 'createdAt' | 'account'>
 
 const PHONE_NUMBER_REGEX = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/
 

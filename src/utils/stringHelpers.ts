@@ -1,3 +1,5 @@
+import randomstring from 'randomstring'
+
 export const capitalizeWords = (input: string) => {
     const MULTI_SPACE_REGEX = /\s+/g
 
@@ -8,4 +10,10 @@ export const capitalizeWords = (input: string) => {
         .split(' ')
         .map(word => word.charAt(0).toUpperCase() + word.substring(1).toLowerCase())
         .join(' ')
+}
+
+export const generateRandomString = (length?: number) => {
+    const RANDOM_STRING_LENGTH = 16
+
+    return randomstring.generate(length ?? RANDOM_STRING_LENGTH)
 }

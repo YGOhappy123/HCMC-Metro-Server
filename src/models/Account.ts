@@ -1,9 +1,12 @@
 import * as bcrypt from 'bcrypt'
 import { Optional } from 'sequelize'
-import { Column, DataType, Model, Table } from 'sequelize-typescript'
+import { Column, DataType, HasOne, Model, Table } from 'sequelize-typescript'
 import { HttpException } from '@/errors/HttpException'
 import { UserRole } from '@/enums/auth'
 import errorMessage from '@/configs/errorMessage'
+import Customer from '@/models/Customer'
+import Staff from '@/models/Staff'
+import Admin from '@/models/Admin'
 
 interface AccountAttributes {
     accountId: number
@@ -68,4 +71,13 @@ export default class Account extends Model<AccountAttributes, CreateAccountAttri
         defaultValue: true
     })
     declare isActive: boolean
+
+    @HasOne(() => Customer, 'accountId')
+    declare customer: Customer[]
+
+    @HasOne(() => Staff, 'accountId')
+    declare staff: Staff[]
+
+    @HasOne(() => Admin, 'accountId')
+    declare admin: Admin[]
 }
