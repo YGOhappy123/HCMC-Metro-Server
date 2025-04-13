@@ -8,6 +8,22 @@ import errorMessage from '@/configs/errorMessage'
 
 const personnelController = {
     // STAFF LOGIC
+    getStaffs: async (req: RequestWithAuthData, res: Response, next: NextFunction) => {
+        try {
+            const { skip, limit, sort, filter } = req.query
+        } catch (error) {
+            next(error)
+        }
+    },
+
+    createNewStaff: async (req: RequestWithAuthData, res: Response, next: NextFunction) => {
+        try {
+            const { userId } = req.auth!
+        } catch (error) {
+            next(error)
+        }
+    },
+
     updateStaff: async (req: RequestWithAuthData, res: Response, next: NextFunction) => {
         try {
             const errors = validationResult(req)
@@ -22,6 +38,14 @@ const personnelController = {
             await personnelService.updateStaff(Number.parseInt(staffId), userId, role, { fullName, email, phoneNumber, avatar, workingStationId })
 
             res.status(200).json({ message: successMessage.UPDATE_USER_SUCCESSFULLY })
+        } catch (error) {
+            next(error)
+        }
+    },
+
+    deactivateStaffAccount: async (req: RequestWithAuthData, res: Response, next: NextFunction) => {
+        try {
+            const { staffId } = req.params
         } catch (error) {
             next(error)
         }
