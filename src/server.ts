@@ -1,22 +1,29 @@
 import express from 'express'
 import cors from 'cors'
+import multer from 'multer'
 import dotenv from 'dotenv'
 dotenv.config()
 
 import sequelizeIns from '@/configs/connectDB'
-import authRoutes from '@/routes/authRoutes'
-import errorHandler from '@/middlewares/errorHandler'
-import requestLogger from '@/middlewares/requestLogger'
 import corsOptions from '@/configs/corsOptions'
 import pinoLogger from '@/configs/pinoLogger'
+import errorHandler from '@/middlewares/errorHandler'
+import requestLogger from '@/middlewares/requestLogger'
+import authRoutes from '@/routes/authRoutes'
+import customerRoutes from '@/routes/customerRoutes'
+import personnelRoutes from '@/routes/personnelRoutes'
+import fileRoutes from '@/routes/fileRoutes'
 
 // App and dependencies initialization
 const app = express()
+const memoryStorage = multer.memoryStorage()
+const upload = multer({ storage: memoryStorage })
 
 // Middlewares configuration
 if (process.env.NODE_ENV === 'development') {
     app.use(requestLogger)
 }
+app.use(upload.array('file'))
 app.use(cors(corsOptions))
 app.use(express.json())
 
@@ -25,6 +32,9 @@ const API_PATH_BASE = '/api/v1'
 const baseRouter = express.Router()
 
 baseRouter.use('/auth', authRoutes)
+baseRouter.use('/files', fileRoutes)
+baseRouter.use('/customers', customerRoutes)
+baseRouter.use('/personnel', personnelRoutes)
 app.use(API_PATH_BASE, baseRouter)
 app.use(errorHandler)
 

@@ -6,7 +6,7 @@ const GOOGLE_TOKEN_REGEX_PATTERN = /^ya29\.[0-9A-Za-z\-_]+$/
 export const loginValidation = [body('username').trim().isString().notEmpty(), body('password').trim().isString().notEmpty()]
 
 export const registerValidation = [
-    body('fullName').trim().isString().isLength({ min: 2, max: 50 }),
+    body('fullName').trim().isString().isLength({ min: 2, max: 255 }),
     body('username').trim().isString().isLength({ min: 8, max: 20 }),
     body('password').trim().isString().isLength({ min: 8, max: 20 }),
     body('confirmPassword').custom((value, { req }) => {

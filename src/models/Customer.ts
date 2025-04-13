@@ -2,7 +2,7 @@ import { Optional } from 'sequelize'
 import { BelongsTo, Column, DataType, ForeignKey, Model, Table } from 'sequelize-typescript'
 import Account from '@/models/Account'
 
-interface CustomerAttributes {
+export interface CustomerAttributes {
     customerId: number
     fullName: string
     email: string

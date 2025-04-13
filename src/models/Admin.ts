@@ -3,7 +3,7 @@ import { BelongsTo, Column, DataType, ForeignKey, HasMany, Model, Table } from '
 import Account from '@/models/Account'
 import Staff from '@/models/Staff'
 
-interface AdminAttributes {
+export interface AdminAttributes {
     adminId: number
     fullName: string
     email: string

@@ -4,7 +4,7 @@ import Account from '@/models/Account'
 import Admin from '@/models/Admin'
 import Station from '@/models/Station'
 
-interface StaffAttributes {
+export interface StaffAttributes {
     staffId: number
     fullName: string
     email: string
