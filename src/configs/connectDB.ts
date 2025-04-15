@@ -13,15 +13,12 @@ const sequelizeIns = new Sequelize({
         idle: 60000
     },
     dialectOptions: {
-        connectTimeout: 60000
+        connectTimeout: 60000,
+        dateStrings: true,
+        typeCast: true
     },
     logging: false,
-    models: [__dirname + '/../models'],
-
-    // This is the "Asia/Ho_Chi_Minh" timezone
-    // ... which is the timezone in Vietnam and some adjacent countries
-    // ... feel free to change this value depend on your location.
-    timezone: '+07:00'
+    models: [__dirname + '/../models']
 })
 
 export default sequelizeIns

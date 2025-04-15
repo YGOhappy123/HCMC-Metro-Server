@@ -15,6 +15,7 @@ export interface StaffAttributes {
     createdAt: Date
     accountId: number
     createdBy: number
+    account?: Account
 }
 
 type CreateStaffAttributes = Optional<StaffAttributes, 'staffId' | 'avatar' | 'createdAt'>
