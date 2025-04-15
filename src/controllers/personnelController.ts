@@ -2,6 +2,7 @@ import { Response, NextFunction } from 'express'
 import { validationResult } from 'express-validator'
 import { RequestWithAuthData } from '@/interfaces/auth'
 import { HttpException } from '@/errors/HttpException'
+import { ISearchParams } from '@/interfaces/params'
 import personnelService from '@/services/personnelService'
 import successMessage from '@/configs/successMessage'
 import errorMessage from '@/configs/errorMessage'
@@ -11,6 +12,14 @@ const personnelController = {
     getStaffs: async (req: RequestWithAuthData, res: Response, next: NextFunction) => {
         try {
             const { skip, limit, sort, filter } = req.query
+            const { staffs, total } = await personnelService.getStaffs({
+                skip: skip !== undefined ? parseInt(skip as string) : undefined,
+                limit: limit !== undefined ? parseInt(limit as string) : undefined,
+                sort,
+                filter
+            } as ISearchParams)
+
+            res.status(200).json({ data: staffs, total, took: staffs.length })
         } catch (error) {
             next(error)
         }
@@ -18,7 +27,17 @@ const personnelController = {
 
     createNewStaff: async (req: RequestWithAuthData, res: Response, next: NextFunction) => {
         try {
+            const errors = validationResult(req)
+            if (!errors.isEmpty()) {
+                throw new HttpException(422, errorMessage.DATA_VALIDATION_FAILED)
+            }
+
             const { userId } = req.auth!
+            const { fullName, email, phoneNumber, hireDate, workingStationId } = req.body
+
+            await personnelService.createNewStaff(fullName, email, phoneNumber, hireDate, workingStationId, userId)
+
+            res.status(201).json({ message: successMessage.CREATE_STAFF_SUCCESSFULLY })
         } catch (error) {
             next(error)
         }
@@ -46,6 +65,10 @@ const personnelController = {
     deactivateStaffAccount: async (req: RequestWithAuthData, res: Response, next: NextFunction) => {
         try {
             const { staffId } = req.params
+
+            await personnelService.deactivateStaffAccount(Number.parseInt(staffId))
+
+            res.status(200).json({ message: successMessage.DEACTIVATE_ACCOUNT_SUCCESSFULLY })
         } catch (error) {
             next(error)
         }
