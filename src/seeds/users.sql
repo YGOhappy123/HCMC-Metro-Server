@@ -16,35 +16,34 @@ VALUES
 	('admin0003', '$2a$11$p0zqPVlicsjeuugOmMD1.ObudJLJK.Xnk/wAy8m77i3VaQbv9SbF6', 'admin', 1),
 	('admin0004', '$2a$11$LmZvWjyF8bxC8WKsYYNkUOSCNXbP1bliq97lc1TmVM5Bn9TKNAbdy', 'admin', 1);
 
+SELECT * FROM ACCOUNT;
+
 INSERT iNTO CUSTOMER
-	(fullName, email, phoneNumber, avatar, accountId)
+	(fullName, email, phoneNumber, avatar, accountId, createdAt)
 VALUES
-	(N'Nguyễn Văn A', NULL, NULL, 'https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png', 1),
-	(N'Trần Văn B', 'tranvanb@gmail.com', NULL, 'https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png', 2),
-	(N'Phan Thị C', NULL, '0913283777', 'https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png', 3),
-	(N'Nguyễn Thị D', 'nguyenthid@gmail.com', '01234421234', 'https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png', 4);
+	(N'Nguyễn Văn A', NULL, NULL, 'https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png', 1, CURRENT_TIMESTAMP),
+	(N'Trần Văn B', 'tranvanb@gmail.com', NULL, 'https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png', 2, CURRENT_TIMESTAMP),
+	(N'Phan Thị C', NULL, '0913283777', 'https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png', 3, CURRENT_TIMESTAMP),
+	(N'Nguyễn Thị D', 'nguyenthid@gmail.com', '01234421234', 'https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png', 4, CURRENT_TIMESTAMP);
+
+SELECT * FROM CUSTOMER;
 
 INSERT iNTO ADMIN
-	(fullName, email, phoneNumber, avatar, accountId, createdBy)
+	(fullName, email, phoneNumber, avatar, accountId, createdBy, createdAt)
 VALUES
-	(N'Trần Hùng E', 'tranhunge@gmail.com', '0907042022', 'https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png', 9, NULL),
-	(N'Lê Thu F', 'lethuf@gmail.com', '0906950152', 'https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png', 10, NULL),
-	(N'Nguyễn Trường G', 'nguyentruongg@gmail.com', '0913283952', 'https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png', 11, 1),
-	(N'Hà Gia H', 'hagiah@gmail.com', '0913283742', 'https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png', 12, 1);
+	(N'Trần Hùng E', 'tranhunge@gmail.com', '0907042022', 'https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png', 9, NULL, CURRENT_TIMESTAMP),
+	(N'Lê Thu F', 'lethuf@gmail.com', '0906950152', 'https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png', 10, NULL, CURRENT_TIMESTAMP),
+	(N'Nguyễn Trường G', 'nguyentruongg@gmail.com', '0913283952', 'https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png', 11, 1, CURRENT_TIMESTAMP),
+	(N'Hà Gia H', 'hagiah@gmail.com', '0913283742', 'https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png', 12, 1, CURRENT_TIMESTAMP);
+
+SELECT * FROM ADMIN;
 
 INSERT iNTO STAFF
-	(fullName, email, phoneNumber, avatar, hireDate, workingStationId, accountId, createdBy)
+	(fullName, email, phoneNumber, avatar, hireDate, workingStationId, accountId, createdBy, createdAt)
 VALUES
-	(N'Nguyễn Trần I', 'nguyentrani@gmail.com', '0904029483', 'https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png', '2025-03-01', 1, 5, 1),
-	(N'Trần Văn K', 'tranvanb@gmail.com', '0938491441', 'https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png', '2025-04-01', 1, 6, 2),
-	(N'Trần Minh L', 'tranminhl@gmail.com', '0913283777', 'https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png', '2025-04-01', 1, 7, 1),
-	(N'Phạm Xuân M', 'phamxuanm@gmail.com', '0123442125', 'https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png', '2025-04-01', 1, 8, 3);
+	(N'Nguyễn Trần I', 'nguyentrani@gmail.com', '0904029483', 'https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png', '2025-03-01', 1, 5, 1, CURRENT_TIMESTAMP),
+	(N'Trần Văn K', 'tranvanb@gmail.com', '0938491441', 'https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png', '2025-04-01', 1, 6, 2, CURRENT_TIMESTAMP),
+	(N'Trần Minh L', 'tranminhl@gmail.com', '0913283777', 'https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png', '2025-04-01', 1, 7, 1, CURRENT_TIMESTAMP),
+	(N'Phạm Xuân M', 'phamxuanm@gmail.com', '0123442125', 'https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png', '2025-04-01', 1, 8, 3, CURRENT_TIMESTAMP);
 
-UPDATE CUSTOMER SET createdAt = CURRENT_TIMESTAMP;
-UPDATE STAFF SET createdAt = CURRENT_TIMESTAMP;
-UPDATE ADMIN SET createdAt = CURRENT_TIMESTAMP;
-
-SELECT * FROM ACCOUNT;
-SELECT * FROM CUSTOMER;
 SELECT * FROM STAFF;
-SELECT * FROM ADMIN;
