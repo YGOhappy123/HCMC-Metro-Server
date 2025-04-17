@@ -127,6 +127,40 @@ const stationServices = {
         )
 
         return result
+    },
+
+    getPathBetweenStationsWithStationName: async (
+        pathList: {
+            from: number
+            to: number
+            line: string
+            price: number
+        }[]
+    ) => {
+        const stationIds = new Set<number>()
+
+        pathList.forEach(path => {
+            stationIds.add(path.from)
+            stationIds.add(path.to)
+        })
+
+        const stations = await Station.findAll({
+            where: { stationId: Array.from(stationIds) }
+        })
+
+        const stationMap = new Map<number, Station>()
+        stations.forEach(station => {
+            stationMap.set(station.stationId, station)
+        })
+
+        const enriched = pathList.map(path => ({
+            fromStation: stationMap.get(path.from),
+            toStation: stationMap.get(path.to),
+            line: path.line,
+            price: path.price
+        }))
+
+        return enriched
     }
 }
 

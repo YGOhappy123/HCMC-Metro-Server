@@ -6,5 +6,6 @@ const router = express.Router()
 
 router.get('/metro-stations', stationController.getStations)
 router.get('/metro-path', getPathValidation, stationController.getPathBetweenStations)
+router.get('/metro-path-enriched', getPathValidation, stationController.getEnrichedPathBetweenStations)
 
 export default router

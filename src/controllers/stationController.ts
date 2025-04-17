@@ -42,6 +42,28 @@ const stationController = {
         } catch (error) {
             next(error)
         }
+    },
+
+    getEnrichedPathBetweenStations: async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const errors = validationResult(req)
+            if (!errors.isEmpty()) {
+                throw new HttpException(422, errorMessage.DATA_VALIDATION_FAILED)
+            }
+
+            const { start, end, method } = req.query
+            const path = await stationServices.getPathBetweenStations(
+                Number.parseInt(start as string),
+                Number.parseInt(end as string),
+                method as PaymentMethodIncludingSfc
+            )
+
+            const data = await stationServices.getPathBetweenStationsWithStationName(path)
+
+            res.status(200).json({ data })
+        } catch (error) {
+            next(error)
+        }
     }
 }
 
