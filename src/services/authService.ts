@@ -36,6 +36,7 @@ const authService = {
                     userId = customer.customerId
                     userData = customer.toJSON()
                     delete userData.customerId
+                    delete userData.accountId
                 }
                 break
             case UserRole.STAFF:
@@ -44,6 +45,7 @@ const authService = {
                     userId = staff.staffId
                     userData = staff.toJSON()
                     delete userData.staffId
+                    delete userData.accountId
                 }
                 break
             case UserRole.ADMIN:
@@ -52,6 +54,7 @@ const authService = {
                     userId = admin.adminId
                     userData = admin.toJSON()
                     delete userData.adminId
+                    delete userData.accountId
                 }
                 break
         }
@@ -83,7 +86,7 @@ const authService = {
             avatar: process.env.SQL_DEFAULT_AVATAR_URL
         })
 
-        const { customerId, ...userData } = newCustomer.toJSON()
+        const { customerId, accountId, ...userData } = newCustomer.toJSON()
         return {
             user: {
                 ...userData,
@@ -223,7 +226,7 @@ const authService = {
                 `${process.env.CLIENT_URL}/auth?type=reset&token=${generateResetPasswordToken({ email: email, type: 'google' })}`
             )
 
-            const { customerId, ...userData } = newCustomer.toJSON()
+            const { customerId, accountId, ...userData } = newCustomer.toJSON()
             return {
                 user: {
                     ...userData,
@@ -234,7 +237,7 @@ const authService = {
                 refreshToken: generateRefreshToken({ accountId: newAccount.accountId })
             }
         } else {
-            const { customerId, account, ...customerData } = customer.toJSON()
+            const { customerId, account, accountId, ...customerData } = customer.toJSON()
 
             return {
                 user: {

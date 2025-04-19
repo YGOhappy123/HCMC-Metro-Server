@@ -4,7 +4,14 @@ USE HCMC_METRO_TICKET;
 INSERT INTO LINE
   (lineId, lineName, distance)
 VALUES
-  (1, 'Bến Thành - Suối Tiên', 19.7);
+  (1, 'Tuyến số 1: Bến Thành - Suối Tiên', 19.7),
+  (2, 'Tuyến số 2: Bến Thành - Tham Lương', 48.0),
+  (3, 'Tuyến số 3A: Bến Thành - Tân Kiên', 19.8),
+  (4, 'Tuyến số 3B: Ngã 6 Cộng Hòa - Hiệp Bình Phước', 12.1),
+  (5, 'Tuyến số 4: Thạnh Xuân - Bến tàu Hiệp Phước', 36.2),
+  (6, 'Tuyến số 4B: Công viên Gia Định - Công viên Hoàng Văn Thụ', 3.2),
+  (7, 'Tuyến số 5: Tân Cảng - Bến xe Cần Giuộc mới', 23.1),
+  (8, 'Tuyến số 6: Bà Quẹo - Vòng xoay Phú Lâm', 6.8);
 
 SELECT * FROM LINE;
 

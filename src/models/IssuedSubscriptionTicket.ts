@@ -1,23 +1,24 @@
 import { Optional } from 'sequelize'
 import { BelongsTo, Column, DataType, ForeignKey, Model, Table } from 'sequelize-typescript'
-import { CommonPaymentMethod } from '@/enums/ticket'
 import Station from '@/models/Station'
-import Customer from '@/models/Customer'
 import SubscriptionTicket from '@/models/SubscriptionTicket'
+import Order from '@/models/Order'
 
 interface IssuedSubscriptionTicketAttributes {
     ticketId: number
     code: string
-    customerId: number
+    orderId: number
     issuedStationId: number
     subscriptionTicketId: number
-    paymentMethod: CommonPaymentMethod
     price: number
-    purchaseDate: Date
-    expirationDate: Date
+    issuedAt: Date
+    expiredAt: Date
 }
 
-type CreateIssuedSubscriptionTicketAttributes = Optional<IssuedSubscriptionTicketAttributes, 'ticketId' | 'customerId' | 'issuedStationId'>
+type CreateIssuedSubscriptionTicketAttributes = Optional<
+    IssuedSubscriptionTicketAttributes,
+    'ticketId' | 'issuedStationId' | 'issuedAt' | 'expiredAt'
+>
 
 const TICKET_CODE_LENGTH_RANGE = [16, 16] as const
 
@@ -41,14 +42,15 @@ export default class IssuedSubscriptionTicket extends Model<IssuedSubscriptionTi
     })
     declare code: string
 
-    @ForeignKey(() => Customer)
+    @ForeignKey(() => Order)
     @Column({
-        type: DataType.INTEGER
+        type: DataType.INTEGER,
+        allowNull: false
     })
-    declare customerId: number
+    declare orderId: number
 
-    @BelongsTo(() => Customer, 'customerId')
-    declare customer: Customer
+    @BelongsTo(() => Order, 'orderId')
+    declare order: Order
 
     @ForeignKey(() => Station)
     @Column({
@@ -68,13 +70,6 @@ export default class IssuedSubscriptionTicket extends Model<IssuedSubscriptionTi
 
     @BelongsTo(() => SubscriptionTicket, 'subscriptionTicketId')
     declare subscriptionTicket: SubscriptionTicket
-
-    @Column({
-        type: DataType.ENUM(...Object.values(CommonPaymentMethod)),
-        allowNull: false,
-        defaultValue: CommonPaymentMethod.CASH
-    })
-    declare paymentMethod: CommonPaymentMethod
 
     @Column({
         type: DataType.DOUBLE,
