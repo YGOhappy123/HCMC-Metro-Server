@@ -29,8 +29,7 @@ export default class Order extends Model<OrderAttributes, CreateOrderAttributes>
 
     @ForeignKey(() => Customer)
     @Column({
-        type: DataType.INTEGER,
-        allowNull: false
+        type: DataType.INTEGER
     })
     declare customerId: number
 
