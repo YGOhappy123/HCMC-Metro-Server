@@ -1,6 +1,7 @@
 import { Optional } from 'sequelize'
-import { BelongsTo, Column, DataType, ForeignKey, Model, Table } from 'sequelize-typescript'
+import { BelongsTo, Column, DataType, ForeignKey, HasMany, Model, Table } from 'sequelize-typescript'
 import Account from '@/models/Account'
+import Order from '@/models/Order'
 
 export interface CustomerAttributes {
     customerId: number
@@ -13,7 +14,7 @@ export interface CustomerAttributes {
     account?: Account
 }
 
-type CreateCustomerAttributes = Optional<CustomerAttributes, 'customerId' | 'email' | 'phoneNumber' | 'avatar' | 'createdAt' | 'account'>
+type CreateCustomerAttributes = Optional<CustomerAttributes, 'customerId' | 'email' | 'phoneNumber' | 'avatar' | 'createdAt'>
 
 const PHONE_NUMBER_REGEX = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/
 
@@ -69,4 +70,7 @@ export default class Customer extends Model<CustomerAttributes, CreateCustomerAt
 
     @BelongsTo(() => Account, 'accountId')
     declare account: Account
+
+    @HasMany(() => Order, 'customerId')
+    declare orders: Order
 }

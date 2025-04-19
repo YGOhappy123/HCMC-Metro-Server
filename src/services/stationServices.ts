@@ -1,9 +1,9 @@
 import { PaymentMethodIncludingSfc } from '@/enums/ticket'
 import { ISearchParams } from '@/interfaces/params'
+import { Op } from 'sequelize'
 import Line from '@/models/Line'
 import SingleJourneyTicketPrice from '@/models/SingleJourneyTicketPrice'
 import Station from '@/models/Station'
-import { Op } from 'sequelize'
 
 const stationServices = {
     getStations: async ({ skip = 0, limit = 8, filter = '{}', sort = '[]' }: ISearchParams) => {

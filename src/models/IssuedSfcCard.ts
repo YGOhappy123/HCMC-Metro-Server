@@ -2,7 +2,7 @@ import { Optional } from 'sequelize'
 import { BelongsTo, Column, DataType, ForeignKey, Model, Table } from 'sequelize-typescript'
 import Station from '@/models/Station'
 
-interface SfcCardAttributes {
+interface IssuedSfcCardAttributes {
     sfcCardId: number
     code: string
     issuedStationId: number
@@ -11,7 +11,7 @@ interface SfcCardAttributes {
     issuedAt: Date
 }
 
-type CreateSfcCardAttributes = Optional<SfcCardAttributes, 'sfcCardId' | 'isActive'>
+type CreateIssuedSfcCardAttributes = Optional<IssuedSfcCardAttributes, 'sfcCardId' | 'isActive'>
 
 const SFC_CARD_CODE_LENGTH_RANGE = [16, 16] as const
 
@@ -19,7 +19,7 @@ const SFC_CARD_CODE_LENGTH_RANGE = [16, 16] as const
     tableName: 'issued_sfc_card',
     timestamps: false
 })
-export default class SfcCard extends Model<SfcCardAttributes, CreateSfcCardAttributes> {
+export default class SfcCard extends Model<IssuedSfcCardAttributes, CreateIssuedSfcCardAttributes> {
     @Column({
         type: DataType.INTEGER,
         primaryKey: true,
