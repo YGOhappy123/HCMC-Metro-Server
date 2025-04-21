@@ -1,6 +1,6 @@
 USE HCMC_METRO_TICKET;
 
-INSERT INTO ACCOUNT
+INSERT INTO `ACCOUNTS`
 	(username, password, role, isActive)
 VALUES
 	('guest0001', '$2a$11$IhRfiM47U4plW7gTI4eHOu7SrEG7sm0SrII0bMvzQVNMgb9NpndKG', 'customer', 1),
@@ -16,9 +16,9 @@ VALUES
 	('admin0003', '$2a$11$p0zqPVlicsjeuugOmMD1.ObudJLJK.Xnk/wAy8m77i3VaQbv9SbF6', 'admin', 1),
 	('admin0004', '$2a$11$LmZvWjyF8bxC8WKsYYNkUOSCNXbP1bliq97lc1TmVM5Bn9TKNAbdy', 'admin', 1);
 
-SELECT * FROM ACCOUNT;
+SELECT * FROM `ACCOUNTS`;
 
-INSERT iNTO CUSTOMER
+INSERT iNTO `CUSTOMERS`
 	(fullName, email, phoneNumber, avatar, accountId, createdAt)
 VALUES
 	(N'Nguyễn Văn A', NULL, NULL, 'https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png', 1, CURRENT_TIMESTAMP),
@@ -26,9 +26,9 @@ VALUES
 	(N'Phan Thị C', NULL, '0913283777', 'https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png', 3, CURRENT_TIMESTAMP),
 	(N'Nguyễn Thị D', 'nguyenthid@gmail.com', '01234421234', 'https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png', 4, CURRENT_TIMESTAMP);
 
-SELECT * FROM CUSTOMER;
+SELECT * FROM `CUSTOMERS`;
 
-INSERT iNTO ADMIN
+INSERT iNTO `ADMINS`
 	(fullName, email, phoneNumber, avatar, accountId, createdBy, createdAt)
 VALUES
 	(N'Trần Hùng E', 'tranhunge@gmail.com', '0907042022', 'https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png', 9, NULL, CURRENT_TIMESTAMP),
@@ -36,9 +36,9 @@ VALUES
 	(N'Nguyễn Trường G', 'nguyentruongg@gmail.com', '0913283952', 'https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png', 11, 1, CURRENT_TIMESTAMP),
 	(N'Hà Gia H', 'hagiah@gmail.com', '0913283742', 'https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png', 12, 1, CURRENT_TIMESTAMP);
 
-SELECT * FROM ADMIN;
+SELECT * FROM `ADMINS`;
 
-INSERT iNTO STAFF
+INSERT iNTO `STAFFS`
 	(fullName, email, phoneNumber, avatar, hireDate, workingStationId, accountId, createdBy, createdAt)
 VALUES
 	(N'Nguyễn Trần I', 'nguyentrani@gmail.com', '0904029483', 'https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png', '2025-03-01', 1, 5, 1, CURRENT_TIMESTAMP),
@@ -46,4 +46,4 @@ VALUES
 	(N'Trần Minh L', 'tranminhl@gmail.com', '0913283777', 'https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png', '2025-04-01', 1, 7, 1, CURRENT_TIMESTAMP),
 	(N'Phạm Xuân M', 'phamxuanm@gmail.com', '0123442125', 'https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png', '2025-04-01', 1, 8, 3, CURRENT_TIMESTAMP);
 
-SELECT * FROM STAFF;
+SELECT * FROM `STAFFS`;

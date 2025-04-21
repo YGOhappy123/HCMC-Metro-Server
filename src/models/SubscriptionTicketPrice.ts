@@ -14,7 +14,7 @@ interface SubscriptionTicketPriceAttributes {
 type CreateSubscriptionTicketPriceAttributes = Optional<SubscriptionTicketPriceAttributes, 'priceId' | 'updatedAt'>
 
 @Table({
-    tableName: 'subscription_ticket_price',
+    tableName: 'subscription_ticket_prices',
     timestamps: false
 })
 export default class SubscriptionTicketPrice extends Model<SubscriptionTicketPriceAttributes, CreateSubscriptionTicketPriceAttributes> {

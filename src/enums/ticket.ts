@@ -1,12 +1,13 @@
-export enum CommonPaymentMethod {
+export enum PaymentMethod {
     CASH = 'cash',
     CREDIT_CARD = 'creditCard',
     DIGITAL_WALLET = 'digitalWallet'
 }
 
-export enum PaymentMethodIncludingSfc {
-    CASH = 'cash',
-    CREDIT_CARD = 'creditCard',
-    DIGITAL_WALLET = 'digitalWallet',
-    SFC = 'sfc'
+export enum TicketStatus {
+    NO_PAYMENT = 'noPayment',
+    ACTIVE = 'active',
+    ONBOARD = 'onboard',
+    USED = 'used',
+    EXPIRED = 'expired'
 }

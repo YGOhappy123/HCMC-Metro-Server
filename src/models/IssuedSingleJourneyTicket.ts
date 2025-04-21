@@ -1,7 +1,9 @@
 import { Optional } from 'sequelize'
-import { BelongsTo, Column, DataType, ForeignKey, Model, Table } from 'sequelize-typescript'
+import { BelongsTo, Column, DataType, ForeignKey, HasOne, Model, Table } from 'sequelize-typescript'
+import { TicketStatus } from '@/enums/ticket'
 import Station from '@/models/Station'
 import Order from '@/models/Order'
+import Trip from '@/models/Trip'
 
 interface IssuedSingleJourneyTicketAttributes {
     ticketId: number
@@ -11,19 +13,20 @@ interface IssuedSingleJourneyTicketAttributes {
     entryStationId: number
     exitStationId: number
     price: number
+    status: TicketStatus
     issuedAt: Date
     expiredAt: Date
 }
 
 type CreateIssuedSingleJourneyTicketAttributes = Optional<
     IssuedSingleJourneyTicketAttributes,
-    'ticketId' | 'issuedStationId' | 'issuedAt' | 'expiredAt'
+    'ticketId' | 'issuedStationId' | 'status' | 'issuedAt' | 'expiredAt'
 >
 
 const TICKET_CODE_LENGTH_RANGE = [16, 16] as const
 
 @Table({
-    tableName: 'issued_single_journey_ticket',
+    tableName: 'issued_single_journey_tickets',
     timestamps: false
 })
 export default class IssuedSingleJourneyTicket extends Model<IssuedSingleJourneyTicketAttributes, CreateIssuedSingleJourneyTicketAttributes> {
@@ -89,6 +92,13 @@ export default class IssuedSingleJourneyTicket extends Model<IssuedSingleJourney
     declare price: number
 
     @Column({
+        type: DataType.ENUM(...Object.values(TicketStatus)),
+        allowNull: false,
+        defaultValue: TicketStatus.NO_PAYMENT
+    })
+    declare status: TicketStatus
+
+    @Column({
         type: DataType.DATE,
         allowNull: false,
         defaultValue: DataType.NOW
@@ -100,4 +110,7 @@ export default class IssuedSingleJourneyTicket extends Model<IssuedSingleJourney
         allowNull: false
     })
     declare expiredAt: Date
+
+    @HasOne(() => Trip, 'singleJourneyTicketId')
+    declare trip: Trip
 }

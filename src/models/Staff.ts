@@ -23,7 +23,7 @@ type CreateStaffAttributes = Optional<StaffAttributes, 'staffId' | 'avatar' | 'c
 const PHONE_NUMBER_REGEX = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/
 
 @Table({
-    tableName: 'staff',
+    tableName: 'staffs',
     timestamps: false
 })
 export default class Staff extends Model<StaffAttributes, CreateStaffAttributes> {
