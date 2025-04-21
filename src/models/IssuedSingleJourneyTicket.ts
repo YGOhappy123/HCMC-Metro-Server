@@ -94,7 +94,7 @@ export default class IssuedSingleJourneyTicket extends Model<IssuedSingleJourney
     @Column({
         type: DataType.ENUM(...Object.values(TicketStatus)),
         allowNull: false,
-        defaultValue: TicketStatus.NO_PAYMENT
+        defaultValue: TicketStatus.UNPAID
     })
     declare status: TicketStatus
 

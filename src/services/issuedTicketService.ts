@@ -2,7 +2,6 @@ import { ISearchParams } from '@/interfaces/params'
 import { buildWhereStatement } from '@/utils/queryHelpers'
 import IssuedSingleJourneyTicket from '@/models/IssuedSingleJourneyTicket'
 import IssuedSubscriptionTicket from '@/models/IssuedSubscriptionTicket'
-import IssuedSfcCard from '@/models/IssuedSfcCard'
 import Order from '@/models/Order'
 import Station from '@/models/Station'
 import Customer from '@/models/Customer'
@@ -46,26 +45,6 @@ const issuedTicketService = {
         return {
             tickets: tickets.map(ticket => {
                 const { issuedStationId, subscriptionTicketId, ...ticketData } = ticket.toJSON()
-                return {
-                    ...ticketData
-                }
-            }),
-            total: count
-        }
-    },
-
-    getSfcCards: async ({ skip = 0, limit = 8, filter = '{}', sort = '[]' }: ISearchParams) => {
-        const { count, rows: cards } = await IssuedSfcCard.findAndCountAll({
-            include: [Station],
-            where: buildWhereStatement(filter),
-            limit: limit,
-            offset: skip,
-            order: JSON.parse(sort)
-        })
-
-        return {
-            cards: cards.map(ticket => {
-                const { issuedStationId, ...ticketData } = ticket.toJSON()
                 return {
                     ...ticketData
                 }

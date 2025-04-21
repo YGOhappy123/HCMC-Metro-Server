@@ -147,7 +147,7 @@ const customerService = {
                         order.update({
                             paymentTime: parseTime(vnpParams['vnp_PayDate'])
                         }),
-                        IssuedSingleJourneyTicket.update({ status: TicketStatus.ACTIVE }, { where: { orderId: order.orderId } })
+                        IssuedSingleJourneyTicket.update({ status: TicketStatus.PAID }, { where: { orderId: order.orderId } })
                     ])
                 } else {
                     throw new HttpException(400, errorMessage.PAYMENT_VERIFICATION_FAILED)
