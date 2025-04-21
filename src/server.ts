@@ -14,6 +14,8 @@ import customerRoutes from '@/routes/customerRoutes'
 import personnelRoutes from '@/routes/personnelRoutes'
 import fileRoutes from '@/routes/fileRoutes'
 import stationRoutes from '@/routes/stationRoutes'
+import issuedTicketRoutes from '@/routes/issuedTicketRoutes'
+import ticketRoutes from '@/routes/ticketRoutes'
 import priceRoutes from '@/routes/priceRoutes'
 
 // App and dependencies initialization
@@ -39,6 +41,8 @@ baseRouter.use('/stations', stationRoutes)
 baseRouter.use('/prices', priceRoutes)
 baseRouter.use('/customers', customerRoutes)
 baseRouter.use('/personnel', personnelRoutes)
+baseRouter.use('/issued-tickets', issuedTicketRoutes)
+baseRouter.use('/tickets', ticketRoutes)
 app.use(API_PATH_BASE, baseRouter)
 app.use(errorHandler)
 
