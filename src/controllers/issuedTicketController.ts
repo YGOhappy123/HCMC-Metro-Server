@@ -35,23 +35,6 @@ const issuedTicketController = {
         } catch (error) {
             next(error)
         }
-    },
-
-    getSfcCards: async (req: Request, res: Response, next: NextFunction) => {
-        try {
-            const { skip, limit, sort, filter } = req.query
-
-            const { cards, total } = await issuedTicketService.getSfcCards({
-                skip: skip !== undefined ? parseInt(skip as string) : undefined,
-                limit: limit !== undefined ? parseInt(limit as string) : undefined,
-                sort,
-                filter
-            } as ISearchParams)
-
-            res.status(200).json({ data: cards, total, took: cards.length })
-        } catch (error) {
-            next(error)
-        }
     }
 }
 
