@@ -5,9 +5,8 @@ export enum PaymentMethod {
 }
 
 export enum TicketStatus {
-    NO_PAYMENT = 'noPayment',
-    ACTIVE = 'active',
+    UNPAID = 'unpaid',
+    PAID = 'paid',
     ONBOARD = 'onboard',
-    USED = 'used',
-    EXPIRED = 'expired'
+    USED = 'used'
 }
