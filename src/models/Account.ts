@@ -23,7 +23,7 @@ const PASSWORD_LENGTH_RANGE = [8, 20] as const
 const BCRYPT_SALT_ROUNDS = 10
 
 @Table({
-    tableName: 'account',
+    tableName: 'accounts',
     timestamps: false
 })
 export default class Account extends Model<AccountAttributes, CreateAccountAttributes> {

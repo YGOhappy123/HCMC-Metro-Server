@@ -1,6 +1,6 @@
 USE HCMC_METRO_TICKET;
 
-INSERT INTO SINGLE_JOURNEY_TICKET_PRICE
+INSERT INTO `SINGLE_JOURNEY_TICKET_PRICES`
   (firstStationId, secondStationId, paymentMethod, price, updatedAt, updatedBy)
 VALUES
   (1, 2, 'cash', 7, CURRENT_TIMESTAMP, 1),
@@ -42,19 +42,6 @@ VALUES
   (1, 12, 'digitalWallet', 15, CURRENT_TIMESTAMP, 1),
   (1, 13, 'digitalWallet', 17, CURRENT_TIMESTAMP, 1),
   (1, 14, 'digitalWallet', 19, CURRENT_TIMESTAMP, 1),
-  (1, 2, 'sfc', 6, CURRENT_TIMESTAMP, 1),
-  (1, 3, 'sfc', 6, CURRENT_TIMESTAMP, 1),
-  (1, 4, 'sfc', 6, CURRENT_TIMESTAMP, 1),
-  (1, 5, 'sfc', 6, CURRENT_TIMESTAMP, 1),
-  (1, 6, 'sfc', 6, CURRENT_TIMESTAMP, 1),
-  (1, 7, 'sfc', 6, CURRENT_TIMESTAMP, 1),
-  (1, 8, 'sfc', 8, CURRENT_TIMESTAMP, 1),
-  (1, 9, 'sfc', 9, CURRENT_TIMESTAMP, 1),
-  (1, 10, 'sfc', 11, CURRENT_TIMESTAMP, 1),
-  (1, 11, 'sfc', 13, CURRENT_TIMESTAMP, 1),
-  (1, 12, 'sfc', 15, CURRENT_TIMESTAMP, 1),
-  (1, 13, 'sfc', 17, CURRENT_TIMESTAMP, 1),
-  (1, 14, 'sfc', 19, CURRENT_TIMESTAMP, 1),
   (2, 3, 'cash', 7, CURRENT_TIMESTAMP, 1),
   (2, 4, 'cash', 7, CURRENT_TIMESTAMP, 1),
   (2, 5, 'cash', 7, CURRENT_TIMESTAMP, 1),
@@ -91,18 +78,6 @@ VALUES
   (2, 12, 'digitalWallet', 15, CURRENT_TIMESTAMP, 1),
   (2, 13, 'digitalWallet', 16, CURRENT_TIMESTAMP, 1),
   (2, 14, 'digitalWallet', 19, CURRENT_TIMESTAMP, 1),
-  (2, 3, 'sfc', 6, CURRENT_TIMESTAMP, 1),
-  (2, 4, 'sfc', 6, CURRENT_TIMESTAMP, 1),
-  (2, 5, 'sfc', 6, CURRENT_TIMESTAMP, 1),
-  (2, 6, 'sfc', 6, CURRENT_TIMESTAMP, 1),
-  (2, 7, 'sfc', 6, CURRENT_TIMESTAMP, 1),
-  (2, 8, 'sfc', 7, CURRENT_TIMESTAMP, 1),
-  (2, 9, 'sfc', 9, CURRENT_TIMESTAMP, 1),
-  (2, 10, 'sfc', 10, CURRENT_TIMESTAMP, 1),
-  (2, 11, 'sfc', 12, CURRENT_TIMESTAMP, 1),
-  (2, 12, 'sfc', 15, CURRENT_TIMESTAMP, 1),
-  (2, 13, 'sfc', 16, CURRENT_TIMESTAMP, 1),
-  (2, 14, 'sfc', 19, CURRENT_TIMESTAMP, 1),
   (3, 4, 'cash', 7, CURRENT_TIMESTAMP, 1),
   (3, 5, 'cash', 7, CURRENT_TIMESTAMP, 1),
   (3, 6, 'cash', 7, CURRENT_TIMESTAMP, 1),
@@ -136,17 +111,6 @@ VALUES
   (3, 12, 'digitalWallet', 14, CURRENT_TIMESTAMP, 1),
   (3, 13, 'digitalWallet', 15, CURRENT_TIMESTAMP, 1),
   (3, 14, 'digitalWallet', 17, CURRENT_TIMESTAMP, 1),
-  (3, 4, 'sfc', 6, CURRENT_TIMESTAMP, 1),
-  (3, 5, 'sfc', 6, CURRENT_TIMESTAMP, 1),
-  (3, 6, 'sfc', 6, CURRENT_TIMESTAMP, 1),
-  (3, 7, 'sfc', 6, CURRENT_TIMESTAMP, 1),
-  (3, 8, 'sfc', 6, CURRENT_TIMESTAMP, 1),
-  (3, 9, 'sfc', 8, CURRENT_TIMESTAMP, 1),
-  (3, 10, 'sfc', 9, CURRENT_TIMESTAMP, 1),
-  (3, 11, 'sfc', 11, CURRENT_TIMESTAMP, 1),
-  (3, 12, 'sfc', 14, CURRENT_TIMESTAMP, 1),
-  (3, 13, 'sfc', 15, CURRENT_TIMESTAMP, 1),
-  (3, 14, 'sfc', 17, CURRENT_TIMESTAMP, 1),
   (4, 5, 'cash', 7, CURRENT_TIMESTAMP, 1),
   (4, 6, 'cash', 7, CURRENT_TIMESTAMP, 1),
   (4, 7, 'cash', 7, CURRENT_TIMESTAMP, 1),
@@ -177,16 +141,6 @@ VALUES
   (4, 12, 'digitalWallet', 12, CURRENT_TIMESTAMP, 1),
   (4, 13, 'digitalWallet', 13, CURRENT_TIMESTAMP, 1),
   (4, 14, 'digitalWallet', 16, CURRENT_TIMESTAMP, 1),
-  (4, 5, 'sfc', 6, CURRENT_TIMESTAMP, 1),
-  (4, 6, 'sfc', 6, CURRENT_TIMESTAMP, 1),
-  (4, 7, 'sfc', 6, CURRENT_TIMESTAMP, 1),
-  (4, 8, 'sfc', 6, CURRENT_TIMESTAMP, 1),
-  (4, 9, 'sfc', 6, CURRENT_TIMESTAMP, 1),
-  (4, 10, 'sfc', 7, CURRENT_TIMESTAMP, 1),
-  (4, 11, 'sfc', 9, CURRENT_TIMESTAMP, 1),
-  (4, 12, 'sfc', 12, CURRENT_TIMESTAMP, 1),
-  (4, 13, 'sfc', 13, CURRENT_TIMESTAMP, 1),
-  (4, 14, 'sfc', 16, CURRENT_TIMESTAMP, 1),
   (5, 6, 'cash', 7, CURRENT_TIMESTAMP, 1),
   (5, 7, 'cash', 7, CURRENT_TIMESTAMP, 1),
   (5, 8, 'cash', 7, CURRENT_TIMESTAMP, 1),
@@ -214,15 +168,6 @@ VALUES
   (5, 12, 'digitalWallet', 11, CURRENT_TIMESTAMP, 1),
   (5, 13, 'digitalWallet', 12, CURRENT_TIMESTAMP, 1),
   (5, 14, 'digitalWallet', 15, CURRENT_TIMESTAMP, 1),
-  (5, 6, 'sfc', 6, CURRENT_TIMESTAMP, 1),
-  (5, 7, 'sfc', 6, CURRENT_TIMESTAMP, 1),
-  (5, 8, 'sfc', 6, CURRENT_TIMESTAMP, 1),
-  (5, 9, 'sfc', 6, CURRENT_TIMESTAMP, 1),
-  (5, 10, 'sfc', 6, CURRENT_TIMESTAMP, 1),
-  (5, 11, 'sfc', 8, CURRENT_TIMESTAMP, 1),
-  (5, 12, 'sfc', 11, CURRENT_TIMESTAMP, 1),
-  (5, 13, 'sfc', 12, CURRENT_TIMESTAMP, 1),
-  (5, 14, 'sfc', 15, CURRENT_TIMESTAMP, 1),
   (6, 7, 'cash', 7, CURRENT_TIMESTAMP, 1),
   (6, 8, 'cash', 7, CURRENT_TIMESTAMP, 1),
   (6, 9, 'cash', 7, CURRENT_TIMESTAMP, 1),
@@ -247,14 +192,6 @@ VALUES
   (6, 12, 'digitalWallet', 9, CURRENT_TIMESTAMP, 1),
   (6, 13, 'digitalWallet', 11, CURRENT_TIMESTAMP, 1),
   (6, 14, 'digitalWallet', 13, CURRENT_TIMESTAMP, 1),
-  (6, 7, 'sfc', 6, CURRENT_TIMESTAMP, 1),
-  (6, 8, 'sfc', 6, CURRENT_TIMESTAMP, 1),
-  (6, 9, 'sfc', 6, CURRENT_TIMESTAMP, 1),
-  (6, 10, 'sfc', 6, CURRENT_TIMESTAMP, 1),
-  (6, 11, 'sfc', 7, CURRENT_TIMESTAMP, 1),
-  (6, 12, 'sfc', 9, CURRENT_TIMESTAMP, 1),
-  (6, 13, 'sfc', 11, CURRENT_TIMESTAMP, 1),
-  (6, 14, 'sfc', 13, CURRENT_TIMESTAMP, 1),
   (7, 8, 'cash', 7, CURRENT_TIMESTAMP, 1),
   (7, 9, 'cash', 7, CURRENT_TIMESTAMP, 1),
   (7, 10, 'cash', 7, CURRENT_TIMESTAMP, 1),
@@ -276,13 +213,6 @@ VALUES
   (7, 12, 'digitalWallet', 8, CURRENT_TIMESTAMP, 1),
   (7, 13, 'digitalWallet', 10, CURRENT_TIMESTAMP, 1),
   (7, 14, 'digitalWallet', 12, CURRENT_TIMESTAMP, 1),
-  (7, 8, 'sfc', 6, CURRENT_TIMESTAMP, 1),
-  (7, 9, 'sfc', 6, CURRENT_TIMESTAMP, 1),
-  (7, 10, 'sfc', 6, CURRENT_TIMESTAMP, 1),
-  (7, 11, 'sfc', 6, CURRENT_TIMESTAMP, 1),
-  (7, 12, 'sfc', 8, CURRENT_TIMESTAMP, 1),
-  (7, 13, 'sfc', 10, CURRENT_TIMESTAMP, 1),
-  (7, 14, 'sfc', 12, CURRENT_TIMESTAMP, 1),
   (8, 9, 'cash', 7, CURRENT_TIMESTAMP, 1),
   (8, 10, 'cash', 7, CURRENT_TIMESTAMP, 1),
   (8, 11, 'cash', 7, CURRENT_TIMESTAMP, 1),
@@ -301,12 +231,6 @@ VALUES
   (8, 12, 'digitalWallet', 7, CURRENT_TIMESTAMP, 1),
   (8, 13, 'digitalWallet', 8, CURRENT_TIMESTAMP, 1),
   (8, 14, 'digitalWallet', 10, CURRENT_TIMESTAMP, 1),
-  (8, 9, 'sfc', 6, CURRENT_TIMESTAMP, 1),
-  (8, 10, 'sfc', 6, CURRENT_TIMESTAMP, 1),
-  (8, 11, 'sfc', 6, CURRENT_TIMESTAMP, 1),
-  (8, 12, 'sfc', 7, CURRENT_TIMESTAMP, 1),
-  (8, 13, 'sfc', 8, CURRENT_TIMESTAMP, 1),
-  (8, 14, 'sfc', 10, CURRENT_TIMESTAMP, 1),
   (9, 10, 'cash', 7, CURRENT_TIMESTAMP, 1),
   (9, 11, 'cash', 7, CURRENT_TIMESTAMP, 1),
   (9, 12, 'cash', 7, CURRENT_TIMESTAMP, 1),
@@ -322,11 +246,6 @@ VALUES
   (9, 12, 'digitalWallet', 6, CURRENT_TIMESTAMP, 1),
   (9, 13, 'digitalWallet', 7, CURRENT_TIMESTAMP, 1),
   (9, 14, 'digitalWallet', 9, CURRENT_TIMESTAMP, 1),
-  (9, 10, 'sfc', 6, CURRENT_TIMESTAMP, 1),
-  (9, 11, 'sfc', 6, CURRENT_TIMESTAMP, 1),
-  (9, 12, 'sfc', 6, CURRENT_TIMESTAMP, 1),
-  (9, 13, 'sfc', 7, CURRENT_TIMESTAMP, 1),
-  (9, 14, 'sfc', 9, CURRENT_TIMESTAMP, 1),
   (10, 11, 'cash', 7, CURRENT_TIMESTAMP, 1),
   (10, 12, 'cash', 7, CURRENT_TIMESTAMP, 1),
   (10, 13, 'cash', 7, CURRENT_TIMESTAMP, 1),
@@ -339,10 +258,6 @@ VALUES
   (10, 12, 'digitalWallet', 6, CURRENT_TIMESTAMP, 1),
   (10, 13, 'digitalWallet', 6, CURRENT_TIMESTAMP, 1),
   (10, 14, 'digitalWallet', 7, CURRENT_TIMESTAMP, 1),
-  (10, 11, 'sfc', 6, CURRENT_TIMESTAMP, 1),
-  (10, 12, 'sfc', 6, CURRENT_TIMESTAMP, 1),
-  (10, 13, 'sfc', 6, CURRENT_TIMESTAMP, 1),
-  (10, 14, 'sfc', 7, CURRENT_TIMESTAMP, 1),
   (11, 12, 'cash', 7, CURRENT_TIMESTAMP, 1),
   (11, 13, 'cash', 7, CURRENT_TIMESTAMP, 1),
   (11, 14, 'cash', 7, CURRENT_TIMESTAMP, 1),
@@ -352,43 +267,34 @@ VALUES
   (11, 12, 'digitalWallet', 6, CURRENT_TIMESTAMP, 1),
   (11, 13, 'digitalWallet', 6, CURRENT_TIMESTAMP, 1),
   (11, 14, 'digitalWallet', 6, CURRENT_TIMESTAMP, 1),
-  (11, 12, 'sfc', 6, CURRENT_TIMESTAMP, 1),
-  (11, 13, 'sfc', 6, CURRENT_TIMESTAMP, 1),
-  (11, 14, 'sfc', 6, CURRENT_TIMESTAMP, 1),
   (12, 13, 'cash', 7, CURRENT_TIMESTAMP, 1),
   (12, 14, 'cash', 7, CURRENT_TIMESTAMP, 1),
   (12, 13, 'creditCard', 6, CURRENT_TIMESTAMP, 1),
   (12, 14, 'creditCard', 6, CURRENT_TIMESTAMP, 1),
   (12, 13, 'digitalWallet', 6, CURRENT_TIMESTAMP, 1),
   (12, 14, 'digitalWallet', 6, CURRENT_TIMESTAMP, 1),
-  (12, 13, 'sfc', 6, CURRENT_TIMESTAMP, 1),
-  (12, 14, 'sfc', 6, CURRENT_TIMESTAMP, 1),
   (13, 14, 'cash', 7, CURRENT_TIMESTAMP, 1),
   (13, 14, 'creditCard', 6, CURRENT_TIMESTAMP, 1),
-  (13, 14, 'digitalWallet', 6, CURRENT_TIMESTAMP, 1),
-  (13, 14, 'sfc', 6, CURRENT_TIMESTAMP, 1);
+  (13, 14, 'digitalWallet', 6, CURRENT_TIMESTAMP, 1);
 
-SELECT * FROM SINGLE_JOURNEY_TICKET_PRICE;
+SELECT * FROM `SINGLE_JOURNEY_TICKET_PRICES`;
 
-INSERT INTO SUBSCRIPTION_TICKET
+INSERT INTO `SUBSCRIPTION_TICKETS`
   (subscriptionTicketId, ticketName, requirements, validityDays)
 VALUES
   (1, 'Vé 1 ngày', NULL, 1),
   (2, 'Vé 3 ngày', NULL, 3),
   (3, 'Vé tháng phổ thông', NULL, 30),
-  (4, 'Vé tháng HSSV', 'Thẻ học sinh/sinh viên còn hiệu lực', 30);
+  (4, 'Vé tháng HSSV', 'Thẻ học sinh/ sinh viên còn hiệu lực', 30);
 
-SELECT * FROM SUBSCRIPTION_TICKET;
+SELECT * FROM `SUBSCRIPTION_TICKETS`;
 
-INSERT INTO SUBSCRIPTION_TICKET_PRICE
+INSERT INTO `SUBSCRIPTION_TICKET_PRICES`
   (subscriptionTicketId, price, updatedAt, updatedBy)
 VALUES
-  (1, 40000, CURRENT_TIMESTAMP, 1),
-  (2, 90000, CURRENT_TIMESTAMP, 1),
-  (3, 300000, CURRENT_TIMESTAMP, 1),
-  (4, 150000, CURRENT_TIMESTAMP, 1);
+  (1, 40000, CURRENT_TIMESTAMP, 2),
+  (2, 90000, CURRENT_TIMESTAMP, 2),
+  (3, 300000, CURRENT_TIMESTAMP, 2),
+  (4, 150000, CURRENT_TIMESTAMP, 2);
 
-SELECT * FROM SUBSCRIPTION_TICKET_PRICE;
-
-
--- INSERT SINGLE JOURNEY / SUBSCRIPTION TICKETS' DESCRIPTION / PRICE
+SELECT * FROM `SUBSCRIPTION_TICKET_PRICES`;

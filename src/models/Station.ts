@@ -13,7 +13,7 @@ interface StationAttributes {
 type CreateStationAttributes = Optional<StationAttributes, 'stationId'>
 
 @Table({
-    tableName: 'station',
+    tableName: 'stations',
     timestamps: false
 })
 export default class Station extends Model<StationAttributes, CreateStationAttributes> {

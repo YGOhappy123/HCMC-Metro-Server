@@ -1,8 +1,10 @@
 import { Optional } from 'sequelize'
-import { BelongsTo, Column, DataType, ForeignKey, Model, Table } from 'sequelize-typescript'
+import { BelongsTo, Column, DataType, ForeignKey, HasMany, Model, Table } from 'sequelize-typescript'
+import { TicketStatus } from '@/enums/ticket'
 import Station from '@/models/Station'
 import SubscriptionTicket from '@/models/SubscriptionTicket'
 import Order from '@/models/Order'
+import Trip from '@/models/Trip'
 
 interface IssuedSubscriptionTicketAttributes {
     ticketId: number
@@ -11,19 +13,20 @@ interface IssuedSubscriptionTicketAttributes {
     issuedStationId: number
     subscriptionTicketId: number
     price: number
+    status: TicketStatus
     issuedAt: Date
     expiredAt: Date
 }
 
 type CreateIssuedSubscriptionTicketAttributes = Optional<
     IssuedSubscriptionTicketAttributes,
-    'ticketId' | 'issuedStationId' | 'issuedAt' | 'expiredAt'
+    'ticketId' | 'issuedStationId' | 'status' | 'issuedAt' | 'expiredAt'
 >
 
 const TICKET_CODE_LENGTH_RANGE = [16, 16] as const
 
 @Table({
-    tableName: 'issued_subscription_ticket',
+    tableName: 'issued_subscription_tickets',
     timestamps: false
 })
 export default class IssuedSubscriptionTicket extends Model<IssuedSubscriptionTicketAttributes, CreateIssuedSubscriptionTicketAttributes> {
@@ -79,6 +82,13 @@ export default class IssuedSubscriptionTicket extends Model<IssuedSubscriptionTi
     declare price: number
 
     @Column({
+        type: DataType.ENUM(...Object.values(TicketStatus)),
+        allowNull: false,
+        defaultValue: TicketStatus.NO_PAYMENT
+    })
+    declare status: TicketStatus
+
+    @Column({
         type: DataType.DATE,
         allowNull: false,
         defaultValue: DataType.NOW
@@ -90,4 +100,7 @@ export default class IssuedSubscriptionTicket extends Model<IssuedSubscriptionTi
         allowNull: false
     })
     declare expiredAt: Date
+
+    @HasMany(() => Trip, 'subscriptionTicketId')
+    declare trips: Trip
 }

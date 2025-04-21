@@ -11,7 +11,7 @@ interface SubscriptionTicketAttributes {
 type CreateSubscriptionTicketAttributes = Optional<SubscriptionTicketAttributes, 'ticketId' | 'requirements'>
 
 @Table({
-    tableName: 'subscription_ticket',
+    tableName: 'subscription_tickets',
     timestamps: false
 })
 export default class SubscriptionTicket extends Model<SubscriptionTicketAttributes, CreateSubscriptionTicketAttributes> {

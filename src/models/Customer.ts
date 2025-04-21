@@ -19,7 +19,7 @@ type CreateCustomerAttributes = Optional<CustomerAttributes, 'customerId' | 'ema
 const PHONE_NUMBER_REGEX = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/
 
 @Table({
-    tableName: 'customer',
+    tableName: 'customers',
     timestamps: false
 })
 export default class Customer extends Model<CustomerAttributes, CreateCustomerAttributes> {

@@ -4,14 +4,14 @@ import { capitalizeWords, generateRandomString } from '@/utils/stringHelpers'
 import { buildWhereStatement } from '@/utils/queryHelpers'
 import { getNow, parseTime } from '@/utils/timeHelpers'
 import { ISearchParams } from '@/interfaces/params'
-import { CommonPaymentMethod, PaymentMethodIncludingSfc } from '@/enums/ticket'
+import { PaymentMethod, TicketStatus } from '@/enums/ticket'
 import Customer, { CustomerAttributes } from '@/models/Customer'
 import Account from '@/models/Account'
 import Station from '@/models/Station'
 import IssuedSingleJourneyTicket from '@/models/IssuedSingleJourneyTicket'
 import IssuedSubscriptionTicket from '@/models/IssuedSubscriptionTicket'
 import SubscriptionTicket from '@/models/SubscriptionTicket'
-import stationServices from '@/services/stationServices'
+import stationService from '@/services/stationService'
 import errorMessage from '@/configs/errorMessage'
 import paymentService from '@/services/paymentService'
 import Order from '@/models/Order'
@@ -105,14 +105,14 @@ const customerService = {
     },
 
     buySingleJourneyTicket: async (customerId: number, entryStationId: number, exitStationId: number, quantity: number) => {
-        const path = await stationServices.getPathBetweenStations(entryStationId, exitStationId, PaymentMethodIncludingSfc.DIGITAL_WALLET)
+        const path = await stationService.getPathBetweenStations(entryStationId, exitStationId, PaymentMethod.DIGITAL_WALLET)
         if (path.length === 0) throw new HttpException(400, errorMessage.NO_AVAILABLE_PATH)
 
         const unitPrice = path.reduce((total, segment) => total + segment.price, 0)
         const newOrder = await Order.create({
             customerId: customerId,
             total: unitPrice * quantity,
-            paymentMethod: CommonPaymentMethod.DIGITAL_WALLET
+            paymentMethod: PaymentMethod.DIGITAL_WALLET
         })
 
         await Promise.all(
@@ -143,9 +143,12 @@ const customerService = {
             if (order.paymentTime == null) {
                 const isSignedMatching = paymentService.verifyVnpayPaymentSigned(vnp_SecureHash, otherParams)
                 if (isSignedMatching) {
-                    await order.update({
-                        paymentTime: parseTime(vnpParams['vnp_PayDate'])
-                    })
+                    await Promise.all([
+                        order.update({
+                            paymentTime: parseTime(vnpParams['vnp_PayDate'])
+                        }),
+                        IssuedSingleJourneyTicket.update({ status: TicketStatus.ACTIVE }, { where: { orderId: order.orderId } })
+                    ])
                 } else {
                     throw new HttpException(400, errorMessage.PAYMENT_VERIFICATION_FAILED)
                 }

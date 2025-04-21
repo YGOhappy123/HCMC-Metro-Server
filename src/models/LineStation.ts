@@ -11,7 +11,7 @@ interface LineStationAttributes {
 type CreateLineStationAttributes = LineStationAttributes
 
 @Table({
-    tableName: 'line_station',
+    tableName: 'lines_stations',
     timestamps: false
 })
 export default class LineStation extends Model<LineStationAttributes, CreateLineStationAttributes> {

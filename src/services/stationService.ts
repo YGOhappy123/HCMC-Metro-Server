@@ -1,11 +1,29 @@
-import { PaymentMethodIncludingSfc } from '@/enums/ticket'
+import { PaymentMethod } from '@/enums/ticket'
 import { ISearchParams } from '@/interfaces/params'
 import { Op } from 'sequelize'
+import { buildWhereStatement } from '@/utils/queryHelpers'
 import Line from '@/models/Line'
 import SingleJourneyTicketPrice from '@/models/SingleJourneyTicketPrice'
 import Station from '@/models/Station'
 
-const stationServices = {
+const stationService = {
+    getLines: async ({ skip = 0, limit = 8, filter = '{}', sort = '[]' }: ISearchParams) => {
+        const { count, rows: lines } = await Line.findAndCountAll({
+            include: [Station],
+            where: buildWhereStatement(filter)
+        })
+
+        return {
+            lines: lines
+                .map(line => line.toJSON())
+                .map((line: any) => {
+                    const sortedStations = [...line.stations].sort((a: any, b: any) => a.LineStation.position - b.LineStation.position)
+                    return { ...line, stations: sortedStations }
+                }),
+            total: count
+        }
+    },
+
     getStations: async ({ skip = 0, limit = 8, filter = '{}', sort = '[]' }: ISearchParams) => {
         const { count, rows: stations } = await Station.findAndCountAll()
 
@@ -15,11 +33,7 @@ const stationServices = {
         }
     },
 
-    getPathBetweenStations: async (
-        startStationId: number,
-        endStationId: number,
-        paymentMethod: PaymentMethodIncludingSfc | undefined = PaymentMethodIncludingSfc.CASH
-    ) => {
+    getPathBetweenStations: async (startStationId: number, endStationId: number, paymentMethod: PaymentMethod | undefined = PaymentMethod.CASH) => {
         if (startStationId === endStationId) return []
 
         const buildLineMap = async () => {
@@ -164,4 +178,4 @@ const stationServices = {
     }
 }
 
-export default stationServices
+export default stationService

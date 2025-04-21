@@ -1,6 +1,6 @@
 import { Optional } from 'sequelize'
 import { BelongsTo, Column, DataType, ForeignKey, HasMany, Model, Table } from 'sequelize-typescript'
-import { CommonPaymentMethod } from '@/enums/ticket'
+import { PaymentMethod } from '@/enums/ticket'
 import Customer from '@/models/Customer'
 import IssuedSubscriptionTicket from '@/models/IssuedSubscriptionTicket'
 import IssuedSingleJourneyTicket from '@/models/IssuedSingleJourneyTicket'
@@ -10,13 +10,13 @@ interface OrderAttributes {
     customerId: number
     total: number
     paymentTime: Date
-    paymentMethod: CommonPaymentMethod
+    paymentMethod: PaymentMethod
 }
 
 type CreateOrderAttributes = Optional<OrderAttributes, 'orderId' | 'customerId' | 'paymentTime'>
 
 @Table({
-    tableName: 'order',
+    tableName: 'orders',
     timestamps: false
 })
 export default class Order extends Model<OrderAttributes, CreateOrderAttributes> {
@@ -49,11 +49,11 @@ export default class Order extends Model<OrderAttributes, CreateOrderAttributes>
     declare paymentTime: Date
 
     @Column({
-        type: DataType.ENUM(...Object.values(CommonPaymentMethod)),
+        type: DataType.ENUM(...Object.values(PaymentMethod)),
         allowNull: false,
-        defaultValue: CommonPaymentMethod.CASH
+        defaultValue: PaymentMethod.CASH
     })
-    declare paymentMethod: CommonPaymentMethod
+    declare paymentMethod: PaymentMethod
 
     @HasMany(() => IssuedSingleJourneyTicket, 'orderId')
     declare singleJourneyTickets: IssuedSingleJourneyTicket[]
