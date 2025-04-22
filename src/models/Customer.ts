@@ -12,6 +12,7 @@ export interface CustomerAttributes {
     createdAt: Date
     accountId: number
     account?: Account
+    orders?: Order[]
 }
 
 type CreateCustomerAttributes = Optional<CustomerAttributes, 'customerId' | 'email' | 'phoneNumber' | 'avatar' | 'createdAt'>
@@ -72,5 +73,5 @@ export default class Customer extends Model<CustomerAttributes, CreateCustomerAt
     declare account: Account
 
     @HasMany(() => Order, 'customerId')
-    declare orders: Order
+    declare orders: Order[]
 }

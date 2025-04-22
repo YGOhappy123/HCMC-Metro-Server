@@ -1,6 +1,4 @@
 import * as bcrypt from 'bcrypt'
-import axios from 'axios'
-
 import { HttpException } from '@/errors/HttpException'
 import {
     generateAccessToken,
@@ -17,6 +15,7 @@ import Staff from '@/models/Staff'
 import Admin from '@/models/Admin'
 import errorMessage from '@/configs/errorMessage'
 import mailerService from '@/services/mailerService'
+import axios from 'axios'
 
 const authService = {
     loginWithUsername: async (username: string, password: string) => {

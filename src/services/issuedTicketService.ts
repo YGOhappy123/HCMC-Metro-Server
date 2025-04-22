@@ -19,7 +19,8 @@ const issuedTicketService = {
             where: buildWhereStatement(filter),
             limit: limit,
             offset: skip,
-            order: JSON.parse(sort)
+            order: JSON.parse(sort),
+            distinct: true
         })
 
         return {
@@ -39,7 +40,8 @@ const issuedTicketService = {
             where: buildWhereStatement(filter),
             limit: limit,
             offset: skip,
-            order: JSON.parse(sort)
+            order: JSON.parse(sort),
+            distinct: true
         })
 
         return {
