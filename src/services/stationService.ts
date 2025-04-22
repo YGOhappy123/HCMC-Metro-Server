@@ -1,6 +1,6 @@
 import { PaymentMethod } from '@/enums/ticket'
 import { ISearchParams } from '@/interfaces/params'
-import { Op } from 'sequelize'
+import { Attributes, FindAndCountOptions, Op } from 'sequelize'
 import { buildWhereStatement } from '@/utils/queryHelpers'
 import Line from '@/models/Line'
 import SingleJourneyTicketPrice from '@/models/SingleJourneyTicketPrice'
@@ -25,11 +25,20 @@ const stationService = {
     },
 
     getStations: async ({ skip = 0, limit = 8, filter = '{}', sort = '[]' }: ISearchParams) => {
-        const { count, rows: stations } = await Station.findAndCountAll({
+        const options: Omit<FindAndCountOptions<Attributes<Station>>, "group"> = {
             limit: limit,
             offset: skip,
-            where: buildWhereStatement(filter)
-        });
+            where: buildWhereStatementForStation(filter)
+        }
+
+        const parsedFilter = JSON.parse(filter)
+        if (parsedFilter.lineId) {
+            options.include = {
+                model: Line,
+                where: buildWhereStatementForLine(filter)
+            }
+        }
+        const { count, rows: stations } = await Station.findAndCountAll(options);
 
         return {
             stations: stations.map(station => station.toJSON()),
@@ -181,5 +190,45 @@ const stationService = {
         return enriched
     }
 }
+
+
+export const buildWhereStatementForStation = (filter: string = '{}') => {
+    const parsedFilter = JSON.parse(filter)
+    const whereStatement: any = {}
+
+    for (const criteria in parsedFilter) {
+        if (parsedFilter[criteria] != undefined) {
+            switch (criteria) {
+                case 'stationName':
+                    whereStatement.stationName = { [Op.like]: `%${parsedFilter[criteria]}%` }
+                    break
+                case 'location':
+                    whereStatement.location = { [Op.like]: `%${parsedFilter[criteria]}%` }
+                    break
+            }
+        }
+    }
+
+    return whereStatement
+}
+
+
+export const buildWhereStatementForLine = (filter: string = '{}') => {
+    const parsedFilter = JSON.parse(filter)
+    const whereStatement: any = {}
+
+    for (const criteria in parsedFilter) {
+        if (parsedFilter[criteria] != undefined) {
+            switch (criteria) {
+                case 'lineId':
+                    whereStatement.lineId = { [Op.eq]: parsedFilter[criteria] }
+                    break
+            }
+        }
+    }
+
+    return whereStatement
+}
+
 
 export default stationService

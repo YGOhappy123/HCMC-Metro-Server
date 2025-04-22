@@ -41,7 +41,7 @@ const stationController = {
     searchStations: async (req: Request, res: Response, next: NextFunction) => {
         try {
             const { skip, limit, sort, filter } = req.query
-            const { stations, total } = await stationServices.getStations({
+            const { stations, total } = await stationService.getStations({
                 skip: skip !== undefined ? parseInt(skip as string) : undefined,
                 limit: limit !== undefined ? parseInt(limit as string) : undefined,
                 sort,
