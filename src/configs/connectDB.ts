@@ -18,7 +18,12 @@ const sequelizeIns = new Sequelize({
         typeCast: true
     },
     logging: false,
-    models: [__dirname + '/../models']
+    models: [__dirname + '/../models'],
+
+    // This is the "Asia/Ho_Chi_Minh" timezone
+    // ... which is the timezone in Vietnam and some adjacent countries
+    // ... feel free to change this value depend on your location.
+    timezone: '+07:00'
 })
 
 export default sequelizeIns

@@ -1,6 +1,6 @@
 import { Optional } from 'sequelize'
 import { BelongsTo, Column, DataType, ForeignKey, Model, Table } from 'sequelize-typescript'
-import { PaymentMethodIncludingSfc } from '@/enums/ticket'
+import { PaymentMethod } from '@/enums/ticket'
 import Admin from '@/models/Admin'
 import Station from '@/models/Station'
 
@@ -8,7 +8,7 @@ interface SingleJourneyTicketPriceAttributes {
     priceId: number
     firstStationId: number
     secondStationId: number
-    paymentMethod: PaymentMethodIncludingSfc
+    paymentMethod: PaymentMethod
     price: number
     updatedAt: Date
     updatedBy: number
@@ -17,7 +17,7 @@ interface SingleJourneyTicketPriceAttributes {
 type CreateSingleJourneyTicketPriceAttributes = Optional<SingleJourneyTicketPriceAttributes, 'priceId' | 'updatedAt'>
 
 @Table({
-    tableName: 'single_journey_ticket_price',
+    tableName: 'single_journey_ticket_prices',
     timestamps: false
 })
 export default class SingleJourneyTicketPrice extends Model<SingleJourneyTicketPriceAttributes, CreateSingleJourneyTicketPriceAttributes> {
@@ -49,11 +49,11 @@ export default class SingleJourneyTicketPrice extends Model<SingleJourneyTicketP
     declare secondStation: Station
 
     @Column({
-        type: DataType.ENUM(...Object.values(PaymentMethodIncludingSfc)),
+        type: DataType.ENUM(...Object.values(PaymentMethod)),
         allowNull: false,
-        defaultValue: PaymentMethodIncludingSfc.CASH
+        defaultValue: PaymentMethod.CASH
     })
-    declare paymentMethod: PaymentMethodIncludingSfc
+    declare paymentMethod: PaymentMethod
 
     @Column({
         type: DataType.DOUBLE,

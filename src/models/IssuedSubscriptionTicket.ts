@@ -1,28 +1,32 @@
 import { Optional } from 'sequelize'
-import { BelongsTo, Column, DataType, ForeignKey, Model, Table } from 'sequelize-typescript'
-import { CommonPaymentMethod } from '@/enums/ticket'
+import { BelongsTo, Column, DataType, ForeignKey, HasMany, Model, Table } from 'sequelize-typescript'
+import { TicketStatus } from '@/enums/ticket'
 import Station from '@/models/Station'
-import Customer from '@/models/Customer'
 import SubscriptionTicket from '@/models/SubscriptionTicket'
+import Order from '@/models/Order'
+import Trip from '@/models/Trip'
 
 interface IssuedSubscriptionTicketAttributes {
     ticketId: number
     code: string
-    customerId: number
+    orderId: number
     issuedStationId: number
     subscriptionTicketId: number
-    paymentMethod: CommonPaymentMethod
     price: number
-    purchaseDate: Date
-    expirationDate: Date
+    status: TicketStatus
+    issuedAt: Date
+    expiredAt: Date
 }
 
-type CreateIssuedSubscriptionTicketAttributes = Optional<IssuedSubscriptionTicketAttributes, 'ticketId' | 'customerId' | 'issuedStationId'>
+type CreateIssuedSubscriptionTicketAttributes = Optional<
+    IssuedSubscriptionTicketAttributes,
+    'ticketId' | 'issuedStationId' | 'status' | 'issuedAt' | 'expiredAt'
+>
 
 const TICKET_CODE_LENGTH_RANGE = [16, 16] as const
 
 @Table({
-    tableName: 'issued_subscription_ticket',
+    tableName: 'issued_subscription_tickets',
     timestamps: false
 })
 export default class IssuedSubscriptionTicket extends Model<IssuedSubscriptionTicketAttributes, CreateIssuedSubscriptionTicketAttributes> {
@@ -41,14 +45,15 @@ export default class IssuedSubscriptionTicket extends Model<IssuedSubscriptionTi
     })
     declare code: string
 
-    @ForeignKey(() => Customer)
+    @ForeignKey(() => Order)
     @Column({
-        type: DataType.INTEGER
+        type: DataType.INTEGER,
+        allowNull: false
     })
-    declare customerId: number
+    declare orderId: number
 
-    @BelongsTo(() => Customer, 'customerId')
-    declare customer: Customer
+    @BelongsTo(() => Order, 'orderId')
+    declare order: Order
 
     @ForeignKey(() => Station)
     @Column({
@@ -70,18 +75,18 @@ export default class IssuedSubscriptionTicket extends Model<IssuedSubscriptionTi
     declare subscriptionTicket: SubscriptionTicket
 
     @Column({
-        type: DataType.ENUM(...Object.values(CommonPaymentMethod)),
-        allowNull: false,
-        defaultValue: CommonPaymentMethod.CASH
-    })
-    declare paymentMethod: CommonPaymentMethod
-
-    @Column({
         type: DataType.DOUBLE,
         allowNull: false,
         validate: { min: 0 }
     })
     declare price: number
+
+    @Column({
+        type: DataType.ENUM(...Object.values(TicketStatus)),
+        allowNull: false,
+        defaultValue: TicketStatus.UNPAID
+    })
+    declare status: TicketStatus
 
     @Column({
         type: DataType.DATE,
@@ -95,4 +100,7 @@ export default class IssuedSubscriptionTicket extends Model<IssuedSubscriptionTi
         allowNull: false
     })
     declare expiredAt: Date
+
+    @HasMany(() => Trip, 'subscriptionTicketId')
+    declare trips: Trip
 }

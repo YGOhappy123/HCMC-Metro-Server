@@ -1,4 +1,5 @@
 import { Op } from 'sequelize'
+import { parseTime } from '@/utils/timeHelpers'
 
 export const buildWhereStatement = (filter: string = '{}') => {
     const parsedFilter = JSON.parse(filter)
@@ -9,19 +10,27 @@ export const buildWhereStatement = (filter: string = '{}') => {
             switch (criteria) {
                 case 'startTime':
                     whereStatement.createdAt = whereStatement.createdAt || {}
-                    whereStatement.createdAt[Op.gte] = new Date(parsedFilter[criteria])
+                    whereStatement.createdAt[Op.gte] = parseTime(parsedFilter[criteria])
                     break
                 case 'endTime':
                     whereStatement.createdAt = whereStatement.createdAt || {}
-                    whereStatement.createdAt[Op.lte] = new Date(parsedFilter[criteria] + ' 23:59:59')
+                    whereStatement.createdAt[Op.lte] = parseTime(parsedFilter[criteria] + ' 23:59:59')
+                    break
+                case 'startIssuedTime':
+                    whereStatement.issuedAt = whereStatement.issuedAt || {}
+                    whereStatement.issuedAt[Op.gte] = parseTime(parsedFilter[criteria])
+                    break
+                case 'endIssuedTime':
+                    whereStatement.issuedAt = whereStatement.issuedAt || {}
+                    whereStatement.issuedAt[Op.lte] = parseTime(parsedFilter[criteria] + ' 23:59:59')
                     break
                 case 'startHireTime':
                     whereStatement.hireDate = whereStatement.hireDate || {}
-                    whereStatement.hireDate[Op.gte] = new Date(parsedFilter[criteria])
+                    whereStatement.hireDate[Op.gte] = parseTime(parsedFilter[criteria])
                     break
                 case 'endHireTime':
                     whereStatement.hireDate = whereStatement.hireDate || {}
-                    whereStatement.hireDate[Op.lte] = new Date(parsedFilter[criteria] + ' 23:59:59')
+                    whereStatement.hireDate[Op.lte] = parseTime(parsedFilter[criteria] + ' 23:59:59')
                     break
                 case 'isActive':
                 case 'isWorking':
@@ -36,6 +45,12 @@ export const buildWhereStatement = (filter: string = '{}') => {
                     break
                 case 'phoneNumber':
                     whereStatement.phoneNumber = { [Op.like]: `%${parsedFilter[criteria]}%` }
+                    break
+                case 'stationName':
+                    whereStatement.stationName = { [Op.like]: `%${parsedFilter[criteria]}%` }
+                    break
+                case 'location':
+                    whereStatement.location = { [Op.like]: `%${parsedFilter[criteria]}%` }
                     break
                 default:
                     whereStatement[criteria] = parsedFilter[criteria]

@@ -19,7 +19,7 @@ type CreateAdminAttributes = Optional<AdminAttributes, 'adminId' | 'avatar' | 'c
 const PHONE_NUMBER_REGEX = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/
 
 @Table({
-    tableName: 'admin',
+    tableName: 'admins',
     timestamps: false
 })
 export default class Admin extends Model<AdminAttributes, CreateAdminAttributes> {

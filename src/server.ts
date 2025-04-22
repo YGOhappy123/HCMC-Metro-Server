@@ -15,6 +15,9 @@ import personnelRoutes from '@/routes/personnelRoutes'
 import fileRoutes from '@/routes/fileRoutes'
 import stationRoutes from '@/routes/stationRoutes'
 import lineRoutes from '@/routes/lineRoutes'
+import issuedTicketRoutes from '@/routes/issuedTicketRoutes'
+import ticketRoutes from '@/routes/ticketRoutes'
+import priceRoutes from '@/routes/priceRoutes'
 
 // App and dependencies initialization
 const app = express()
@@ -37,8 +40,11 @@ baseRouter.use('/auth', authRoutes)
 baseRouter.use('/files', fileRoutes)
 baseRouter.use('/stations', stationRoutes)
 baseRouter.use('/lines', lineRoutes)
+baseRouter.use('/prices', priceRoutes)
 baseRouter.use('/customers', customerRoutes)
 baseRouter.use('/personnel', personnelRoutes)
+baseRouter.use('/issued-tickets', issuedTicketRoutes)
+baseRouter.use('/tickets', ticketRoutes)
 app.use(API_PATH_BASE, baseRouter)
 app.use(errorHandler)
 

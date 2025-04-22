@@ -25,7 +25,7 @@ const personnelService = {
 
         return {
             staffs: staffs.map(staff => {
-                const { account, ...staffData } = staff.toJSON()
+                const { account, accountId, ...staffData } = staff.toJSON()
                 return {
                     ...staffData,
                     isActive: account?.isActive

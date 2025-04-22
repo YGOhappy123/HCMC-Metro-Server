@@ -12,7 +12,7 @@ interface LineAttributes {
 type CreateLineAttributes = Optional<LineAttributes, 'lineId'>
 
 @Table({
-    tableName: 'line',
+    tableName: 'lines',
     timestamps: false
 })
 export default class Line extends Model<LineAttributes, CreateLineAttributes> {

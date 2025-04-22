@@ -12,6 +12,7 @@ const personnelController = {
     getStaffs: async (req: RequestWithAuthData, res: Response, next: NextFunction) => {
         try {
             const { skip, limit, sort, filter } = req.query
+
             const { staffs, total } = await personnelService.getStaffs({
                 skip: skip !== undefined ? parseInt(skip as string) : undefined,
                 limit: limit !== undefined ? parseInt(limit as string) : undefined,
