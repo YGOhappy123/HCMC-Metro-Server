@@ -72,6 +72,23 @@ const customerController = {
         }
     },
 
+    buySubscriptionTicket: async (req: RequestWithAuthData, res: Response, next: NextFunction) => {
+        try {
+            const errors = validationResult(req)
+            if (!errors.isEmpty()) {
+                throw new HttpException(422, errors.array().toString())
+            }
+
+            const { userId } = req.auth!
+            const { ticketId, quantity } = req.body
+            const vnpayPaymentUrl = await customerService.buySubscriptionTicket(userId, ticketId, quantity)
+
+            res.status(200).json({ data: { paymentUrl: vnpayPaymentUrl } })
+        } catch (error) {
+            next(error)
+        }
+    },
+
     verifyPayment: async (req: RequestWithAuthData, res: Response, next: NextFunction) => {
         try {
             const { userId } = req.auth!
@@ -80,6 +97,24 @@ const customerController = {
             await customerService.verifyPayment(userId, vnpParams)
 
             res.status(200).json({ message: successMessage.VERIFY_PAYMENT_SUCCESSFULLY })
+        } catch (error) {
+            next(error)
+        }
+    },
+
+    getCustomerOrders: async (req: RequestWithAuthData, res: Response, next: NextFunction) => {
+        try {
+            const { userId } = req.auth!
+            const { skip, limit, sort, filter } = req.query
+
+            const { orders, total } = await customerService.getCustomerOrders(userId, {
+                skip: skip !== undefined ? parseInt(skip as string) : undefined,
+                limit: limit !== undefined ? parseInt(limit as string) : undefined,
+                sort,
+                filter
+            } as ISearchParams)
+
+            res.status(200).json({ data: orders, total, took: orders.length })
         } catch (error) {
             next(error)
         }

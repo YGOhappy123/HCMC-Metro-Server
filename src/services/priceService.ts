@@ -7,6 +7,8 @@ import Station from '@/models/Station'
 import errorMessage from '@/configs/errorMessage'
 import SingleJourneyTicketPrice from '@/models/SingleJourneyTicketPrice'
 import Admin from '@/models/Admin'
+import SubscriptionTicket from '@/models/SubscriptionTicket'
+import SubscriptionTicketPrice from '@/models/SubscriptionTicketPrice'
 
 const getStationCombinations = (stationIds: number[]) => {
     const combinations: { stations: number[]; prices: any[] }[] = []
@@ -91,6 +93,44 @@ const priceService = {
             firstStationId: firstStationId,
             secondStationId: secondStationId,
             paymentMethod: paymentMethod,
+            price: price,
+            updatedBy: adminId
+        })
+    },
+
+    getSubscriptionPrice: async ({ skip = 0, limit = 8, filter = '{}', sort = '[]' }: ISearchParams) => {
+        const { ticketId } = JSON.parse(filter)
+        if (ticketId && typeof ticketId !== 'number') throw new HttpException(400, errorMessage.INVALID_TICKET_SELECTED)
+
+        const tickets = await SubscriptionTicket.findAll({
+            where: ticketId ? { subscriptionTicketId: ticketId } : {}
+        })
+        let combinations = tickets.map(tk => ({ ticket: tk.toJSON(), prices: [] }))
+
+        await Promise.all(
+            combinations.map(async combo => {
+                const prices = await SubscriptionTicketPrice.findAll({
+                    include: [Admin],
+                    where: { subscriptionTicketId: combo.ticket.subscriptionTicketId },
+                    order: [['updatedAt', 'DESC']]
+                })
+
+                combo.prices = prices.map(price => price.toJSON())
+            })
+        )
+
+        return {
+            prices: skip >= combinations.length ? [] : combinations.slice(skip, skip + limit),
+            total: combinations.length
+        }
+    },
+
+    updateSubscriptionPrice: async (adminId: number, subscriptionTicketId: number, price: number) => {
+        const ticket = await Station.findByPk(subscriptionTicketId)
+        if (!ticket) throw new HttpException(400, errorMessage.INVALID_TICKET_SELECTED)
+
+        await SubscriptionTicketPrice.create({
+            subscriptionTicketId: subscriptionTicketId,
             price: price,
             updatedBy: adminId
         })

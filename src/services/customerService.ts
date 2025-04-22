@@ -15,6 +15,7 @@ import stationService from '@/services/stationService'
 import errorMessage from '@/configs/errorMessage'
 import paymentService from '@/services/paymentService'
 import Order from '@/models/Order'
+import SubscriptionTicketPrice from '@/models/SubscriptionTicketPrice'
 
 const customerService = {
     getCustomers: async ({ skip = 0, limit = 8, filter = '{}', sort = '[]' }: ISearchParams) => {
@@ -132,6 +133,38 @@ const customerService = {
         return vnpayPaymentUrl
     },
 
+    buySubscriptionTicket: async (customerId: number, ticketId: number, quantity: number) => {
+        const ticket = await SubscriptionTicket.findByPk(ticketId)
+        if (!ticket || ticket.requirements != null) throw new HttpException(400, errorMessage.INVALID_TICKET_SELECTED)
+
+        const ticketPrice = await SubscriptionTicketPrice.findOne({
+            where: { subscriptionTicketId: ticketId },
+            order: [['updatedAt', 'DESC']]
+        })
+        const unitPrice = ticketPrice?.price ?? 0
+
+        const newOrder = await Order.create({
+            customerId: customerId,
+            total: unitPrice * quantity,
+            paymentMethod: PaymentMethod.DIGITAL_WALLET
+        })
+
+        await Promise.all(
+            Array.from({ length: quantity }, () =>
+                IssuedSubscriptionTicket.create({
+                    code: generateRandomString(16),
+                    orderId: newOrder.orderId,
+                    subscriptionTicketId: ticketId,
+                    price: unitPrice,
+                    expiredAt: getNow().add(ticket.validityDays, 'day').toDate()
+                })
+            )
+        )
+
+        const vnpayPaymentUrl = paymentService.generateVnpayPaymentUrl(newOrder.orderId, unitPrice * quantity * 1000)
+        return vnpayPaymentUrl
+    },
+
     verifyPayment: async (customerId: number, vnpParams: any) => {
         const order = await Order.findByPk(Number.parseInt(vnpParams['vnp_TxnRef']))
         if (!order) throw new HttpException(404, errorMessage.ORDER_NOT_FOUND)
@@ -147,7 +180,8 @@ const customerService = {
                         order.update({
                             paymentTime: parseTime(vnpParams['vnp_PayDate'])
                         }),
-                        IssuedSingleJourneyTicket.update({ status: TicketStatus.PAID }, { where: { orderId: order.orderId } })
+                        IssuedSingleJourneyTicket.update({ status: TicketStatus.PAID }, { where: { orderId: order.orderId } }),
+                        IssuedSubscriptionTicket.update({ status: TicketStatus.PAID }, { where: { orderId: order.orderId } })
                     ])
                 } else {
                     throw new HttpException(400, errorMessage.PAYMENT_VERIFICATION_FAILED)
@@ -155,6 +189,33 @@ const customerService = {
             }
         } else {
             throw new HttpException(400, errorMessage.PAYMENT_VERIFICATION_FAILED)
+        }
+    },
+
+    getCustomerOrders: async (customerId: number, { skip = 0, limit = 8, filter = '{}', sort = '[]' }: ISearchParams) => {
+        const { rows: orders, count } = await Order.findAndCountAll({
+            where: { ...buildWhereStatement(filter), customerId: customerId },
+            include: [
+                {
+                    model: IssuedSingleJourneyTicket,
+                    include: [
+                        { model: Station, as: 'entryStation' },
+                        { model: Station, as: 'exitStation' }
+                    ]
+                },
+                {
+                    model: IssuedSubscriptionTicket,
+                    include: [SubscriptionTicket]
+                }
+            ],
+            limit: limit,
+            offset: skip,
+            order: JSON.parse(sort)
+        })
+
+        return {
+            orders: orders.map(order => order.toJSON()),
+            total: count
         }
     }
 }

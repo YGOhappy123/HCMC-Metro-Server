@@ -285,16 +285,22 @@ VALUES
   (1, 'Vé 1 ngày', NULL, 1),
   (2, 'Vé 3 ngày', NULL, 3),
   (3, 'Vé tháng phổ thông', NULL, 30),
-  (4, 'Vé tháng HSSV', 'Thẻ học sinh/ sinh viên còn hiệu lực', 30);
+  (4, 'Vé tháng học sinh - sinh viên', 'Thẻ học sinh/ sinh viên còn hiệu lực', 30);
+  (5, 'Vé tháng ưu tiên người cao tuổi tật', 'CCCD Việt Nam từ đủ 60 tuổi trở lên', 30),
+  (6, 'Vé tháng ưu tiên người khuyết tật', 'Giấy xác nhận khuyết tật', 30),
+  (7, 'Vé tháng ưu tiên người có công với cách mạng', 'Giấy xác nhận là người có công với cách mạng', 30);
 
 SELECT * FROM `SUBSCRIPTION_TICKETS`;
 
 INSERT INTO `SUBSCRIPTION_TICKET_PRICES`
   (subscriptionTicketId, price, updatedAt, updatedBy)
 VALUES
-  (1, 40000, CURRENT_TIMESTAMP, 2),
-  (2, 90000, CURRENT_TIMESTAMP, 2),
-  (3, 300000, CURRENT_TIMESTAMP, 2),
-  (4, 150000, CURRENT_TIMESTAMP, 2);
+  (1, 40, CURRENT_TIMESTAMP, 2),
+  (2, 90, CURRENT_TIMESTAMP, 2),
+  (3, 300, CURRENT_TIMESTAMP, 2),
+  (4, 150, CURRENT_TIMESTAMP, 2),
+  (5, 100, CURRENT_TIMESTAMP, 2),
+  (6, 100, CURRENT_TIMESTAMP, 2),
+  (7, 100, CURRENT_TIMESTAMP, 2);
 
 SELECT * FROM `SUBSCRIPTION_TICKET_PRICES`;

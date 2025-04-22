@@ -40,6 +40,40 @@ const priceController = {
         } catch (error) {
             next(error)
         }
+    },
+
+    getSubscriptionPrice: async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const { skip, limit, sort, filter } = req.query
+
+            const { prices, total } = await priceService.getSubscriptionPrice({
+                skip: skip !== undefined ? parseInt(skip as string) : undefined,
+                limit: limit !== undefined ? parseInt(limit as string) : undefined,
+                sort,
+                filter
+            } as ISearchParams)
+
+            res.status(200).json({ data: prices, total, took: prices.length })
+        } catch (error) {
+            next(error)
+        }
+    },
+
+    updateSubscriptionPrice: async (req: RequestWithAuthData, res: Response, next: NextFunction) => {
+        try {
+            const errors = validationResult(req)
+            if (!errors.isEmpty()) {
+                throw new HttpException(422, errorMessage.DATA_VALIDATION_FAILED)
+            }
+
+            const { userId } = req.auth!
+            const { ticketId, price } = req.body
+            await priceService.updateSubscriptionPrice(userId, ticketId, price)
+
+            res.status(200).json({ message: successMessage.UPDATE_PRICE_SUCCESSFULLY })
+        } catch (error) {
+            next(error)
+        }
     }
 }
 
