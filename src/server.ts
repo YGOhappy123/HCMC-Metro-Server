@@ -14,6 +14,7 @@ import customerRoutes from '@/routes/customerRoutes'
 import personnelRoutes from '@/routes/personnelRoutes'
 import fileRoutes from '@/routes/fileRoutes'
 import stationRoutes from '@/routes/stationRoutes'
+import lineRoutes from '@/routes/lineRoutes'
 
 // App and dependencies initialization
 const app = express()
@@ -35,6 +36,7 @@ const baseRouter = express.Router()
 baseRouter.use('/auth', authRoutes)
 baseRouter.use('/files', fileRoutes)
 baseRouter.use('/stations', stationRoutes)
+baseRouter.use('/lines', lineRoutes)
 baseRouter.use('/customers', customerRoutes)
 baseRouter.use('/personnel', personnelRoutes)
 app.use(API_PATH_BASE, baseRouter)

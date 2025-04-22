@@ -1,36 +1,36 @@
 import { Request, Response, NextFunction } from 'express'
 import { ISearchParams } from '@/interfaces/params'
-import stationServices from '@/services/stationServices'
+import lineServices from '@/services/lineServices'
 
-const stationController = {
-    getStations: async (req: Request, res: Response, next: NextFunction) => {
+const lineController = {
+    getLines: async (req: Request, res: Response, next: NextFunction) => {
         try {
             const { skip, limit, sort, filter } = req.query
-            const { stations, total } = await stationServices.getStations({
+            const { lines, total } = await lineServices.getLines({
                 skip: skip !== undefined ? parseInt(skip as string) : undefined,
                 limit: limit !== undefined ? parseInt(limit as string) : undefined,
             } as ISearchParams)
 
-            res.status(200).json({ data: stations, total, took: stations.length })
+            res.status(200).json({ data: lines, total, took: lines.length })
         } catch (error) {
             next(error)
         }
     },
-    searchStations: async (req: Request, res: Response, next: NextFunction) => {
+    searchLines: async (req: Request, res: Response, next: NextFunction) => {
         try {
             const { skip, limit, sort, filter } = req.query
-            const { stations, total } = await stationServices.getStations({
+            const { lines, total } = await lineServices.getLines({
                 skip: skip !== undefined ? parseInt(skip as string) : undefined,
                 limit: limit !== undefined ? parseInt(limit as string) : undefined,
                 sort,
                 filter
             } as ISearchParams)
 
-            res.status(200).json({ data: stations, total, took: stations.length })
+            res.status(200).json({ data: lines, total, took: lines.length })
         } catch (error) {
             next(error)
         }
     }
 }
 
-export default stationController
+export default lineController
