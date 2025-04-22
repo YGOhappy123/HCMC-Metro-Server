@@ -4,3 +4,5 @@ export interface ISearchParams {
     filter?: string
     sort?: string
 }
+
+export type StatisticType = 'daily' | 'weekly' | 'monthly' | 'yearly'
