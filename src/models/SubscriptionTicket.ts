@@ -2,13 +2,13 @@ import { Optional } from 'sequelize'
 import { Column, DataType, Model, Table } from 'sequelize-typescript'
 
 interface SubscriptionTicketAttributes {
-    ticketId: number
-    name: string
+    subscriptionTicketId: number
+    ticketName: string
     requirements: string
     validityDays: number
 }
 
-type CreateSubscriptionTicketAttributes = Optional<SubscriptionTicketAttributes, 'ticketId' | 'requirements'>
+type CreateSubscriptionTicketAttributes = Optional<SubscriptionTicketAttributes, 'subscriptionTicketId' | 'requirements'>
 
 @Table({
     tableName: 'subscription_tickets',

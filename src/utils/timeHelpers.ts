@@ -1,5 +1,5 @@
 import 'dayjs/locale/vi'
-import dayjs from 'dayjs'
+import dayjs, { Dayjs } from 'dayjs'
 import tz from 'dayjs/plugin/timezone'
 import utc from 'dayjs/plugin/utc'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
@@ -8,10 +8,11 @@ dayjs.extend(tz)
 dayjs.extend(utc)
 dayjs.extend(localizedFormat)
 dayjs.tz.setDefault('Asia/Ho_Chi_Minh')
+dayjs.locale('vi')
 
 type TimeType = 'daily' | 'weekly' | 'monthly' | 'yearly'
 
-export const getStartOfTimeByType = (timestamp: string | number | Date, type: TimeType) => {
+export const getStartOfTimeByType = (timestamp: string | number | Date | Dayjs, type: TimeType) => {
     const date = dayjs.tz(timestamp)
 
     switch (type) {
@@ -45,7 +46,7 @@ export const getEndOfTimeByType = (timestamp: string | number | Date, type: Time
     }
 }
 
-export const getPreviousTimeByType = (timestamp: string | number | Date, type: TimeType) => {
+export const getPreviousTimeByType = (timestamp: string | number | Date | Dayjs, type: TimeType) => {
     const timestampDayJs = dayjs.tz(timestamp)
 
     switch (type) {
@@ -66,7 +67,7 @@ export const getNow = () => {
     return dayjs.tz(Date.now())
 }
 
-export const isSame = (time: string | number | Date, compareTarget: string | number | Date, compareUnit: dayjs.OpUnitType) => {
+export const isSame = (time: string | number | Date | Dayjs, compareTarget: string | number | Date | Dayjs, compareUnit: dayjs.OpUnitType) => {
     return dayjs.tz(time).isSame(dayjs.tz(compareTarget), compareUnit)
 }
 

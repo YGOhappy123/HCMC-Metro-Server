@@ -6,7 +6,7 @@ export const buildWhereStatement = (filter: string = '{}') => {
     const whereStatement: any = {}
 
     for (const criteria in parsedFilter) {
-        if (parsedFilter[criteria] != undefined) {
+        if (parsedFilter[criteria] !== undefined) {
             switch (criteria) {
                 case 'startTime':
                     whereStatement.createdAt = whereStatement.createdAt || {}
@@ -24,6 +24,22 @@ export const buildWhereStatement = (filter: string = '{}') => {
                     whereStatement.issuedAt = whereStatement.issuedAt || {}
                     whereStatement.issuedAt[Op.lte] = parseTime(parsedFilter[criteria] + ' 23:59:59')
                     break
+                case 'startEntryTime':
+                    whereStatement.entryTime = whereStatement.entryTime || {}
+                    whereStatement.entryTime[Op.gte] = parseTime(parsedFilter[criteria])
+                    break
+                case 'endEntryTime':
+                    whereStatement.entryTime = whereStatement.entryTime || {}
+                    whereStatement.entryTime[Op.lte] = parseTime(parsedFilter[criteria] + ' 23:59:59')
+                    break
+                case 'startExitTime':
+                    whereStatement.exitTime = whereStatement.exitTime || {}
+                    whereStatement.exitTime[Op.gte] = parseTime(parsedFilter[criteria])
+                    break
+                case 'endExitTime':
+                    whereStatement.exitTime = whereStatement.exitTime || {}
+                    whereStatement.exitTime[Op.lte] = parseTime(parsedFilter[criteria] + ' 23:59:59')
+                    break
                 case 'startHireTime':
                     whereStatement.hireDate = whereStatement.hireDate || {}
                     whereStatement.hireDate[Op.gte] = parseTime(parsedFilter[criteria])
@@ -34,8 +50,7 @@ export const buildWhereStatement = (filter: string = '{}') => {
                     break
                 case 'isActive':
                 case 'isWorking':
-                    whereStatement['$Account.isActive$'] =
-                        parsedFilter[criteria] === true || parsedFilter[criteria] === 'true' || parsedFilter[criteria] === 1
+                    whereStatement['$Account.isActive$'] = [true, 'true', 1].includes(parsedFilter[criteria])
                     break
                 case 'fullName':
                     whereStatement.fullName = { [Op.like]: `%${parsedFilter[criteria]}%` }
@@ -51,6 +66,12 @@ export const buildWhereStatement = (filter: string = '{}') => {
                     break
                 case 'location':
                     whereStatement.location = { [Op.like]: `%${parsedFilter[criteria]}%` }
+                case 'payments':
+                    if ([true, 'true', 1].includes(parsedFilter[criteria])) {
+                        whereStatement.paymentTime = { [Op.ne]: null }
+                    } else if ([false, 'false', 0].includes(parsedFilter[criteria])) {
+                        whereStatement.paymentTime = { [Op.eq]: null }
+                    }
                     break
                 default:
                     whereStatement[criteria] = parsedFilter[criteria]
