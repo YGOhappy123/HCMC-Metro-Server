@@ -16,6 +16,7 @@ import fileRoutes from '@/routes/fileRoutes'
 import stationRoutes from '@/routes/stationRoutes'
 import issuedTicketRoutes from '@/routes/issuedTicketRoutes'
 import ticketRoutes from '@/routes/ticketRoutes'
+import tripRoutes from '@/routes/tripRoutes'
 import priceRoutes from '@/routes/priceRoutes'
 import statisticRoutes from '@/routes/statisticRoutes'
 
@@ -44,6 +45,7 @@ baseRouter.use('/customers', customerRoutes)
 baseRouter.use('/personnel', personnelRoutes)
 baseRouter.use('/issued-tickets', issuedTicketRoutes)
 baseRouter.use('/tickets', ticketRoutes)
+baseRouter.use('/trips', tripRoutes)
 baseRouter.use('/statistics', statisticRoutes)
 app.use(API_PATH_BASE, baseRouter)
 app.use(errorHandler)
