@@ -20,6 +20,22 @@ const issuedTicketController = {
         }
     },
 
+    createOrderSubscription: async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const { paymentMethod, paymentTime, totalAmount } = req.body;
+    
+            if (!paymentMethod || !paymentTime || !totalAmount) {
+                res.status(400).json({ message: 'Thiếu thông tin đơn hàng' });
+            }
+    
+            const orderId = Date.now();
+    
+            res.status(201).json({ message: 'Đơn hàng đã được tạo', data: { orderId } });
+        } catch (error) {
+            next(error);
+        }
+    },
+
     getSubscriptionTickets: async (req: Request, res: Response, next: NextFunction) => {
         try {
             const { skip, limit, sort, filter } = req.query

@@ -7,5 +7,6 @@ const router = express.Router()
 
 router.get('/single-journey', verifyRoles([UserRole.ADMIN]), issuedTicketController.getSingleJourneyTickets)
 router.get('/subscription', verifyRoles([UserRole.ADMIN]), issuedTicketController.getSubscriptionTickets)
+router.post('/orders', issuedTicketController.createOrderSubscription);
 
 export default router

@@ -127,43 +127,136 @@ const personnelService = {
 
         await Account.update({ isActive: false }, { where: { accountId: staff.accountId } })
     },
+    
 
     // ADMIN LOGIC
-    updateAdmin: async (adminId: number, data: Partial<AdminAttributes>) => {
-        const admin = await Admin.findOne({ where: { adminId: adminId }, include: [{ model: Account, where: { isActive: true } }] })
-        if (!admin) throw new HttpException(404, errorMessage.USER_NOT_FOUND)
+  getAdmins: async ({ skip = 0, limit = 8, filter = '{}', sort = '[]' }: ISearchParams) => {
+    const { count, rows: admins } = await Admin.findAndCountAll({
+      where: buildWhereStatement(filter),
+      limit: limit,
+      offset: skip,
+      order: JSON.parse(sort),
+    });
 
-        const dataToUpdate: Partial<AdminAttributes> = {}
+    return {
+      admins: admins.map(admin => admin.toJSON()),
+      total: count,
+    };
+  },
 
-        if (data.fullName != undefined) dataToUpdate.fullName = capitalizeWords(data.fullName)
-        if (data.avatar != undefined) dataToUpdate.avatar = data.avatar.trim()
+  createNewAdmin: async (
+    fullName: string,
+    email: string,
+    phoneNumber: string,
+    createdBy: number | null
+  ) => {
+    console.log('createNewAdmin input:', { fullName, email, phoneNumber, createdBy });
 
-        if (data.email != undefined) {
-            const isEmailDuplicate = !!(await Admin.findOne({
-                where: {
-                    email: data.email.trim(),
-                    adminId: { [Op.ne]: adminId }
-                },
-                include: [{ model: Account, where: { isActive: true } }]
-            }))
-            if (isEmailDuplicate) throw new HttpException(409, errorMessage.EMAIL_EXISTED)
-            dataToUpdate.email = data.email.trim()
-        }
-
-        if (data.phoneNumber != undefined) {
-            const isPhoneNumberDuplicate = !!(await Admin.findOne({
-                where: {
-                    phoneNumber: data.phoneNumber.trim(),
-                    adminId: { [Op.ne]: adminId }
-                },
-                include: [{ model: Account, where: { isActive: true } }]
-            }))
-            if (isPhoneNumberDuplicate) throw new HttpException(409, errorMessage.PHONE_NUMBER_EXISTED)
-            dataToUpdate.phoneNumber = data.phoneNumber.trim()
-        }
-
-        await admin.update(dataToUpdate)
+    // Kiểm tra email trùng
+    const isEmailDuplicate = await Admin.findOne({
+      where: { email: email.trim() },
+    });
+    if (isEmailDuplicate) {
+      console.log('Duplicate email:', email);
+      throw new HttpException(409, errorMessage.EMAIL_EXISTED);
     }
-}
 
-export default personnelService
+    // Kiểm tra phoneNumber trùng
+    const isPhoneNumberDuplicate = await Admin.findOne({
+      where: { phoneNumber: phoneNumber.trim() },
+    });
+    if (isPhoneNumberDuplicate) {
+      console.log('Duplicate phoneNumber:', phoneNumber);
+      throw new HttpException(409, errorMessage.PHONE_NUMBER_EXISTED);
+    }
+
+    // Tạo tài khoản mới cho admin
+    const randomUsername = generateRandomString();
+    const randomPassword = generateRandomString();
+
+    const newAccount = await Account.create({
+      username: randomUsername,
+      password: randomPassword,
+      role: UserRole.ADMIN,
+    });
+
+    try {
+      await Admin.create({
+        fullName: capitalizeWords(fullName),
+        email: email.trim(),
+        phoneNumber: phoneNumber.trim(),
+        avatar: process.env.SQL_DEFAULT_AVATAR_URL ,
+        accountId: newAccount.accountId,
+        createdBy: createdBy ?? undefined,
+      });
+      console.log('Admin created successfully');
+
+      mailerService.sendWelcomeNewStaffMail(
+        email.trim(),
+        capitalizeWords(fullName),
+        dayjs().format('DD/MM/YYYY'),
+        'Admin Role',
+        randomUsername,
+        randomPassword,
+        `${process.env.CLIENT_URL}/profile/change-password`
+      );
+    } catch (error) {
+      console.error('Error creating admin:', error);
+      await Account.destroy({ where: { accountId: newAccount.accountId } });
+      throw new HttpException(500, 'Lỗi khi tạo admin');
+    }
+  },
+
+  updateAdmin: async (adminId: number, data: Partial<AdminAttributes>) => {
+    console.log('updateAdmin input:', { adminId, data });
+
+    const admin = await Admin.findByPk(adminId);
+    if (!admin) {
+      console.log('Admin not found:', adminId);
+      throw new HttpException(404, errorMessage.USER_NOT_FOUND);
+    }
+
+    const dataToUpdate: Partial<AdminAttributes> = {};
+
+    if (data.fullName != undefined) dataToUpdate.fullName = capitalizeWords(data.fullName);
+    if (data.avatar != undefined) dataToUpdate.avatar = data.avatar.trim();
+
+    if (data.email != undefined) {
+      const isEmailDuplicate = await Admin.findOne({
+        where: {
+          email: data.email.trim(),
+          adminId: { [Op.ne]: adminId },
+        },
+      });
+      if (isEmailDuplicate) {
+        console.log('Duplicate email:', data.email);
+        throw new HttpException(409, errorMessage.EMAIL_EXISTED);
+      }
+      dataToUpdate.email = data.email.trim();
+    }
+
+    if (data.phoneNumber != undefined) {
+      const isPhoneNumberDuplicate = await Admin.findOne({
+        where: {
+          phoneNumber: data.phoneNumber.trim(),
+          adminId: { [Op.ne]: adminId },
+        },
+      });
+      if (isPhoneNumberDuplicate) {
+        console.log('Duplicate phoneNumber:', data.phoneNumber);
+        throw new HttpException(409, errorMessage.PHONE_NUMBER_EXISTED);
+      }
+      dataToUpdate.phoneNumber = data.phoneNumber.trim();
+    }
+
+    try {
+      await admin.update(dataToUpdate);
+      console.log('Admin updated successfully');
+    } catch (error) {
+      console.error('Error updating admin:', error);
+      throw new HttpException(500, 'Lỗi khi cập nhật admin');
+    }
+  },
+};
+
+export default personnelService;

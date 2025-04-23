@@ -29,3 +29,10 @@ export const updateAdminValidation = [
     body('phoneNumber').trim().optional().isMobilePhone('vi-VN'),
     body('avatar').trim().optional().isURL()
 ]
+
+export const createAdminValidation = [
+    body('fullName').trim().isString().isLength({ min: 2, max: 255 }),
+    body('email').trim().isEmail(),
+    body('phoneNumber').trim().isMobilePhone('vi-VN'),
+  ];
+  

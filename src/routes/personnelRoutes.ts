@@ -1,5 +1,5 @@
 import { UserRole } from '@/enums/auth'
-import { updateAdminValidation, createStaffValidation, updateStaffValidation } from '@/validations/userValidation'
+import { updateAdminValidation, createStaffValidation, updateStaffValidation,createAdminValidation } from '@/validations/userValidation'
 import verifyRoles from '@/middlewares/verifyRoles'
 import personnelController from '@/controllers/personnelController'
 import express from 'express'
@@ -11,6 +11,8 @@ router.post('/staffs', verifyRoles([UserRole.ADMIN]), createStaffValidation, per
 router.patch('/staffs/:staffId/update-info', verifyRoles([UserRole.STAFF, UserRole.ADMIN]), updateStaffValidation, personnelController.updateStaff)
 router.post('/staffs/:staffId/deactivate-account', verifyRoles([UserRole.ADMIN]), personnelController.deactivateStaffAccount)
 
-router.patch('/admins/update-info', verifyRoles([UserRole.ADMIN]), updateAdminValidation, personnelController.updateAdmin)
+router.get('/admins', verifyRoles([UserRole.ADMIN]), personnelController.getAdmins);
+router.post('/admins', verifyRoles([UserRole.ADMIN]), createAdminValidation, personnelController.createNewAdmin);
+router.patch('/admins/update-info', verifyRoles([UserRole.ADMIN]), updateAdminValidation, personnelController.updateAdmin);
 
 export default router

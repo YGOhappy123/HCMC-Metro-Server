@@ -76,23 +76,71 @@ const personnelController = {
     },
 
     // ADMIN LOGIC
-    updateAdmin: async (req: RequestWithAuthData, res: Response, next: NextFunction) => {
-        try {
-            const errors = validationResult(req)
-            if (!errors.isEmpty()) {
-                throw new HttpException(422, errorMessage.DATA_VALIDATION_FAILED)
-            }
+  getAdmins: async (req: RequestWithAuthData, res: Response, next: NextFunction) => {
+    try {
+      const { skip, limit, sort, filter } = req.query;
 
-            const { userId } = req.auth!
-            const { fullName, email, phoneNumber, avatar } = req.body
+      const { admins, total } = await personnelService.getAdmins({
+        skip: skip !== undefined ? parseInt(skip as string) : undefined,
+        limit: limit !== undefined ? parseInt(limit as string) : undefined,
+        sort,
+        filter,
+      } as ISearchParams);
 
-            await personnelService.updateAdmin(userId, { fullName, email, phoneNumber, avatar })
-
-            res.status(200).json({ message: successMessage.UPDATE_USER_SUCCESSFULLY })
-        } catch (error) {
-            next(error)
-        }
+      res.status(200).json({ data: admins, total, took: admins.length });
+    } catch (error) {
+      next(error);
     }
-}
+  },
 
-export default personnelController
+  createNewAdmin: async (req: RequestWithAuthData, res: Response, next: NextFunction) => {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        console.log('Validation errors in createNewAdmin:', errors.array());
+        throw new HttpException(422, 'Dữ liệu không hợp lệ: ' + JSON.stringify(errors.array()));
+      }
+
+      const { userId } = req.auth!;
+      const { fullName, email, phoneNumber } = req.body;
+
+      console.log('createNewAdmin request:', { fullName, email, phoneNumber, userId });
+
+      await personnelService.createNewAdmin(fullName, email, phoneNumber, userId);
+
+      res.status(201).json({ message: successMessage.CREATE_STAFF_SUCCESSFULLY });
+    } catch (error) {
+      console.error('Error in createNewAdmin:', error);
+      next(error);
+    }
+  },
+
+  updateAdmin: async (req: RequestWithAuthData, res: Response, next: NextFunction) => {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        console.log('Validation errors in updateAdmin:', errors.array());
+        throw new HttpException(422, 'Dữ liệu không hợp lệ: ' + JSON.stringify(errors.array()));
+      }
+
+      const { adminId } = req.params;
+      const { fullName, email, phoneNumber, avatar } = req.body;
+
+      console.log('updateAdmin request:', { adminId, fullName, email, phoneNumber, avatar });
+
+      await personnelService.updateAdmin(Number.parseInt(adminId), {
+        fullName,
+        email,
+        phoneNumber,
+        avatar,
+      });
+
+      res.status(200).json({ message: successMessage.UPDATE_USER_SUCCESSFULLY });
+    } catch (error) {
+      console.error('Error in updateAdmin:', error);
+      next(error);
+    }
+  },
+};
+
+export default personnelController;

@@ -6,5 +6,6 @@ import ticketController from '@/controllers/ticketController'
 const router = express.Router()
 
 router.get('/subscription', verifyRoles([UserRole.ADMIN]), ticketController.getSubscriptionTickets)
+router.post('/ticket/issue-subscription-ticket', ticketController.issueSubscriptionTicket);
 
 export default router
