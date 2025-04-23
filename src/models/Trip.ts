@@ -38,7 +38,7 @@ export default class Trip extends Model<TripAttributes, CreateTripAttributes> {
     })
     declare entryStationId: number
 
-    @BelongsTo(() => Station, 'entryStationId')
+    @BelongsTo(() => Station, { foreignKey: 'entryStationId', as: 'entryStation' })
     declare entryStation: Station
 
     @ForeignKey(() => Station)
@@ -47,7 +47,7 @@ export default class Trip extends Model<TripAttributes, CreateTripAttributes> {
     })
     declare exitStationId: number
 
-    @BelongsTo(() => Station, 'exitStationId')
+    @BelongsTo(() => Station, { foreignKey: 'exitStationId', as: 'exitStation' })
     declare exitStation: Station
 
     @ForeignKey(() => IssuedSingleJourneyTicket)
