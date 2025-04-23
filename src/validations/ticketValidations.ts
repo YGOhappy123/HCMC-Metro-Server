@@ -29,3 +29,8 @@ export const updateSingleJourneyPriceValidation = [
 ]
 
 export const updateSubscriptionPriceValidation = [body('ticketId').notEmpty().isInt({ min: 1 }), body('price').notEmpty().isInt({ min: 1 })]
+
+export const checkInCheckOutValidation = [
+    body('code').notEmpty().isString().isLength({ min: 16, max: 16 }),
+    body('station').notEmpty().isInt({ min: 1 })
+]
