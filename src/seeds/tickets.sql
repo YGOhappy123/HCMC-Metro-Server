@@ -915,7 +915,7 @@ VALUES
   (1, 'Vé 1 ngày', NULL, 1),
   (2, 'Vé 3 ngày', NULL, 3),
   (3, 'Vé tháng phổ thông', NULL, 30),
-  (4, 'Vé tháng học sinh - sinh viên', 'Thẻ học sinh/ sinh viên còn hiệu lực', 30);
+  (4, 'Vé tháng học sinh - sinh viên', 'Thẻ học sinh/ sinh viên còn hiệu lực', 30),
   (5, 'Vé tháng ưu tiên người cao tuổi tật', 'CCCD Việt Nam từ đủ 60 tuổi trở lên', 30),
   (6, 'Vé tháng ưu tiên người khuyết tật', 'Giấy xác nhận khuyết tật', 30),
   (7, 'Vé tháng ưu tiên người có công với cách mạng', 'Giấy xác nhận là người có công với cách mạng', 30);
