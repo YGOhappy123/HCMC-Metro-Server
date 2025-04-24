@@ -1,16 +1,20 @@
 import { ISearchParams } from '@/interfaces/params'
 import { buildWhereStatement } from '@/utils/queryHelpers'
-import SubscriptionTicket from '@/models/SubscriptionTicket'
-import SubscriptionTicketPrice from '@/models/SubscriptionTicketPrice'
 import { getNow, parseTime } from '@/utils/timeHelpers'
 import { HttpException } from '@/errors/HttpException'
-import { TicketStatus } from '@/enums/ticket'
+import { PaymentMethod, TicketStatus } from '@/enums/ticket'
 import { Op } from 'sequelize'
+import { generateRandomString } from '@/utils/stringHelpers'
+import SubscriptionTicket from '@/models/SubscriptionTicket'
+import SubscriptionTicketPrice from '@/models/SubscriptionTicketPrice'
 import errorMessage from '@/configs/errorMessage'
 import IssuedSingleJourneyTicket from '@/models/IssuedSingleJourneyTicket'
 import IssuedSubscriptionTicket from '@/models/IssuedSubscriptionTicket'
 import Trip from '@/models/Trip'
 import Station from '@/models/Station'
+import stationService from '@/services/stationService'
+import Order from '@/models/Order'
+import Staff from '@/models/Staff'
 
 const START_HOUR = 5
 const END_HOUR = 23
@@ -51,6 +55,70 @@ const ticketService = {
             }),
             total: count
         }
+    },
+
+    sellSingleJourneyTicket: async (staffId: number, entryStationId: number, exitStationId: number, quantity: number, method: PaymentMethod) => {
+        const path = await stationService.getPathBetweenStations(entryStationId, exitStationId, PaymentMethod.DIGITAL_WALLET)
+        if (path.length === 0) throw new HttpException(400, errorMessage.NO_AVAILABLE_PATH)
+
+        const staff = await Staff.findByPk(staffId)
+        if (!staff) throw new HttpException(400, errorMessage.INVALID_CREDENTIALS)
+
+        const unitPrice = path.reduce((total, segment) => total + segment.price, 0)
+        const newOrder = await Order.create({
+            total: unitPrice * quantity,
+            paymentMethod: method,
+            paymentTime: getNow().toDate()
+        })
+
+        await Promise.all(
+            Array.from({ length: quantity }, () =>
+                IssuedSingleJourneyTicket.create({
+                    code: generateRandomString(16),
+                    orderId: newOrder.orderId,
+                    entryStationId,
+                    exitStationId,
+                    price: unitPrice,
+                    expiredAt: getNow().add(30, 'day').toDate(),
+                    issuedStationId: staff.workingStationId,
+                    status: TicketStatus.PAID
+                })
+            )
+        )
+    },
+
+    sellSubscriptionTicket: async (staffId: number, ticketId: number, quantity: number, method: PaymentMethod) => {
+        const ticket = await SubscriptionTicket.findByPk(ticketId)
+        if (!ticket || ticket.requirements != null) throw new HttpException(400, errorMessage.INVALID_TICKET_SELECTED)
+
+        const staff = await Staff.findByPk(staffId)
+        if (!staff) throw new HttpException(400, errorMessage.INVALID_CREDENTIALS)
+
+        const ticketPrice = await SubscriptionTicketPrice.findOne({
+            where: { subscriptionTicketId: ticketId },
+            order: [['updatedAt', 'DESC']]
+        })
+        const unitPrice = ticketPrice?.price ?? 0
+
+        const newOrder = await Order.create({
+            total: unitPrice * quantity,
+            paymentMethod: PaymentMethod.DIGITAL_WALLET,
+            paymentTime: getNow().toDate()
+        })
+
+        await Promise.all(
+            Array.from({ length: quantity }, () =>
+                IssuedSubscriptionTicket.create({
+                    code: generateRandomString(16),
+                    orderId: newOrder.orderId,
+                    subscriptionTicketId: ticketId,
+                    price: unitPrice,
+                    expiredAt: getNow().add(ticket.validityDays, 'day').toDate(),
+                    issuedStationId: staff.workingStationId,
+                    status: TicketStatus.PAID
+                })
+            )
+        )
     },
 
     demoCheckIn: async (ticketCode: string, entryStationId: number) => {

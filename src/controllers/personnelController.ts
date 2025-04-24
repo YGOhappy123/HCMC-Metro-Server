@@ -76,6 +76,41 @@ const personnelController = {
     },
 
     // ADMIN LOGIC
+    getAdmins: async (req: RequestWithAuthData, res: Response, next: NextFunction) => {
+        try {
+            const { skip, limit, sort, filter } = req.query
+
+            const { admins, total } = await personnelService.getAdmins({
+                skip: skip !== undefined ? parseInt(skip as string) : undefined,
+                limit: limit !== undefined ? parseInt(limit as string) : undefined,
+                sort,
+                filter
+            } as ISearchParams)
+
+            res.status(200).json({ data: admins, total, took: admins.length })
+        } catch (error) {
+            next(error)
+        }
+    },
+
+    createNewAdmin: async (req: RequestWithAuthData, res: Response, next: NextFunction) => {
+        try {
+            const errors = validationResult(req)
+            if (!errors.isEmpty()) {
+                throw new HttpException(422, errorMessage.DATA_VALIDATION_FAILED)
+            }
+
+            const { userId } = req.auth!
+            const { fullName, email, phoneNumber } = req.body
+
+            await personnelService.createNewAdmin(fullName, email, phoneNumber, userId)
+
+            res.status(201).json({ message: successMessage.CREATE_ADMIN_SUCCESSFULLY })
+        } catch (error) {
+            next(error)
+        }
+    },
+
     updateAdmin: async (req: RequestWithAuthData, res: Response, next: NextFunction) => {
         try {
             const errors = validationResult(req)
@@ -89,6 +124,18 @@ const personnelController = {
             await personnelService.updateAdmin(userId, { fullName, email, phoneNumber, avatar })
 
             res.status(200).json({ message: successMessage.UPDATE_USER_SUCCESSFULLY })
+        } catch (error) {
+            next(error)
+        }
+    },
+
+    deactivateAdminAccount: async (req: RequestWithAuthData, res: Response, next: NextFunction) => {
+        try {
+            const { adminId } = req.params
+
+            await personnelService.deactivateAdminAccount(Number.parseInt(adminId))
+
+            res.status(200).json({ message: successMessage.DEACTIVATE_ACCOUNT_SUCCESSFULLY })
         } catch (error) {
             next(error)
         }

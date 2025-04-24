@@ -5,6 +5,6 @@ import tripController from '@/controllers/tripController'
 
 const router = express.Router()
 
-router.get('/', verifyRoles([UserRole.ADMIN]), tripController.getTrips)
+router.get('/', verifyRoles([UserRole.ADMIN, UserRole.STAFF]), tripController.getTrips)
 
 export default router

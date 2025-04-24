@@ -130,6 +130,68 @@ const personnelService = {
     },
 
     // ADMIN LOGIC
+    getAdmins: async ({ skip = 0, limit = 8, filter = '{}', sort = '[]' }: ISearchParams) => {
+        const { count, rows: admins } = await Admin.findAndCountAll({
+            include: [Account, { model: Admin, as: 'createdByAdmin' }],
+            where: buildWhereStatement(filter),
+            limit: limit,
+            offset: skip,
+            order: JSON.parse(sort),
+            distinct: true
+        })
+
+        return {
+            admins: admins.map(admin => {
+                const { account, accountId, ...adminData } = admin.toJSON()
+                return {
+                    ...adminData,
+                    isActive: account?.isActive
+                }
+            }),
+            total: count
+        }
+    },
+
+    createNewAdmin: async (fullName: string, email: string, phoneNumber: string, adminId: number) => {
+        const isEmailDuplicate = !!(await Admin.findOne({
+            where: { email: email.trim() },
+            include: [{ model: Account, where: { isActive: true } }]
+        }))
+        if (isEmailDuplicate) throw new HttpException(409, errorMessage.EMAIL_EXISTED)
+
+        const isPhoneNumberDuplicate = !!(await Admin.findOne({
+            where: { phoneNumber: phoneNumber.trim() },
+            include: [{ model: Account, where: { isActive: true } }]
+        }))
+        if (isPhoneNumberDuplicate) throw new HttpException(409, errorMessage.PHONE_NUMBER_EXISTED)
+
+        const randomUsername = generateRandomString()
+        const randomPassword = generateRandomString()
+
+        const newAccount = await Account.create({
+            username: randomUsername,
+            password: randomPassword,
+            role: UserRole.ADMIN
+        })
+
+        await Admin.create({
+            fullName: capitalizeWords(fullName),
+            email: email.trim(),
+            phoneNumber: phoneNumber.trim(),
+            avatar: process.env.SQL_DEFAULT_AVATAR_URL,
+            createdBy: adminId,
+            accountId: newAccount.accountId
+        })
+
+        mailerService.sendWelcomeNewAdminMail(
+            email.trim(),
+            capitalizeWords(fullName),
+            randomUsername,
+            randomPassword,
+            `${process.env.CLIENT_URL}/profile/change-password`
+        )
+    },
+
     updateAdmin: async (adminId: number, data: Partial<AdminAttributes>) => {
         const admin = await Admin.findOne({ where: { adminId: adminId }, include: [{ model: Account, where: { isActive: true } }] })
         if (!admin) throw new HttpException(404, errorMessage.USER_NOT_FOUND)
@@ -164,6 +226,13 @@ const personnelService = {
         }
 
         await admin.update(dataToUpdate)
+    },
+
+    deactivateAdminAccount: async (adminId: number) => {
+        const admin = await Admin.findOne({ where: { adminId: adminId }, include: [{ model: Account, where: { isActive: true } }] })
+        if (!admin) throw new HttpException(404, errorMessage.USER_NOT_FOUND)
+
+        await Account.update({ isActive: false }, { where: { accountId: admin.accountId } })
     }
 }
 

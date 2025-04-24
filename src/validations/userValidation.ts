@@ -23,6 +23,12 @@ export const updateStaffValidation = [
     body('workingStationId').trim().optional().isNumeric()
 ]
 
+export const createAdminValidation = [
+    body('fullName').trim().isString().isLength({ min: 2, max: 255 }),
+    body('email').trim().isEmail(),
+    body('phoneNumber').trim().isMobilePhone('vi-VN')
+]
+
 export const updateAdminValidation = [
     body('fullName').trim().optional().isString().isLength({ min: 2, max: 255 }),
     body('email').trim().optional().isEmail(),

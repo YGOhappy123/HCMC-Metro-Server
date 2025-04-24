@@ -13,7 +13,20 @@ export const buySingleJourneyValidation = [
     body('quantity').notEmpty().isInt({ min: 1 })
 ]
 
+export const sellSingleJourneyValidation = [
+    body('start').notEmpty().isInt({ min: 1 }),
+    body('end').notEmpty().isInt({ min: 1 }),
+    body('quantity').notEmpty().isInt({ min: 1 }),
+    body('method').notEmpty().isIn(Object.values(PaymentMethod))
+]
+
 export const buySubscriptionValidation = [body('ticketId').notEmpty().isInt({ min: 1 }), body('quantity').notEmpty().isInt({ min: 1 })]
+
+export const sellSubscriptionValidation = [
+    body('ticketId').notEmpty().isInt({ min: 1 }),
+    body('quantity').notEmpty().isInt({ min: 1 }),
+    body('method').notEmpty().isIn(Object.values(PaymentMethod))
+]
 
 export const verifyPaymentValidation = [
     query('vnp_TxnRef').notEmpty().isInt({ min: 1 }),

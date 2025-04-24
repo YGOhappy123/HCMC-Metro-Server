@@ -12,6 +12,7 @@ export interface AdminAttributes {
     createdAt: Date
     accountId: number
     createdBy: number
+    account?: Account
 }
 
 type CreateAdminAttributes = Optional<AdminAttributes, 'adminId' | 'avatar' | 'createdAt' | 'createdBy'>
@@ -80,7 +81,7 @@ export default class Admin extends Model<AdminAttributes, CreateAdminAttributes>
     })
     declare createdBy: number
 
-    @BelongsTo(() => Admin, 'createdBy')
+    @BelongsTo(() => Admin, { foreignKey: 'createdBy', as: 'createdByAdmin' })
     declare createdByAdmin: Admin | null
 
     @HasMany(() => Admin, 'createdBy')

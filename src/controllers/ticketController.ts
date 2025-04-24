@@ -1,7 +1,9 @@
 import { Request, Response, NextFunction } from 'express'
 import { validationResult } from 'express-validator'
+import { RequestWithAuthData } from '@/interfaces/auth'
 import { ISearchParams } from '@/interfaces/params'
 import { HttpException } from '@/errors/HttpException'
+import { PaymentMethod } from '@/enums/ticket'
 import ticketService from '@/services/ticketService'
 import errorMessage from '@/configs/errorMessage'
 import successMessage from '@/configs/successMessage'
@@ -29,6 +31,40 @@ const issuedTicketController = {
             } as ISearchParams)
 
             res.status(200).json({ data: tickets, total, took: tickets.length })
+        } catch (error) {
+            next(error)
+        }
+    },
+
+    sellSingleJourneyTicket: async (req: RequestWithAuthData, res: Response, next: NextFunction) => {
+        try {
+            const errors = validationResult(req)
+            if (!errors.isEmpty()) {
+                throw new HttpException(422, errors.array().toString())
+            }
+
+            const { userId } = req.auth!
+            const { start, end, quantity, method } = req.body
+            await ticketService.sellSingleJourneyTicket(userId, start, end, quantity, method as PaymentMethod)
+
+            res.status(200).json({ message: successMessage.SELL_TICKETS_SUCCESSFULLY })
+        } catch (error) {
+            next(error)
+        }
+    },
+
+    sellSubscriptionTicket: async (req: RequestWithAuthData, res: Response, next: NextFunction) => {
+        try {
+            const errors = validationResult(req)
+            if (!errors.isEmpty()) {
+                throw new HttpException(422, errors.array().toString())
+            }
+
+            const { userId } = req.auth!
+            const { ticketId, quantity, method } = req.body
+            await ticketService.sellSubscriptionTicket(userId, ticketId, quantity, method as PaymentMethod)
+
+            res.status(200).json({ message: successMessage.SELL_TICKETS_SUCCESSFULLY })
         } catch (error) {
             next(error)
         }

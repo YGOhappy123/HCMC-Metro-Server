@@ -24,8 +24,8 @@ const stationService = {
         }
     },
 
-    getStations: async ({ skip = 0, limit = 8, filter = '{}', sort = '[]' }: ISearchParams) => {
-        const options: Omit<FindAndCountOptions<Attributes<Station>>, "group"> = {
+    getStations: async ({ skip = 0, limit = 999, filter = '{}', sort = '[]' }: ISearchParams) => {
+        const options: Omit<FindAndCountOptions<Attributes<Station>>, 'group'> = {
             limit: limit,
             offset: skip,
             where: buildWhereStatementForStation(filter)
@@ -38,7 +38,7 @@ const stationService = {
                 where: buildWhereStatementForLine(filter)
             }
         }
-        const { count, rows: stations } = await Station.findAndCountAll(options);
+        const { count, rows: stations } = await Station.findAndCountAll(options)
 
         return {
             stations: stations.map(station => station.toJSON()),
@@ -191,7 +191,6 @@ const stationService = {
     }
 }
 
-
 export const buildWhereStatementForStation = (filter: string = '{}') => {
     const parsedFilter = JSON.parse(filter)
     const whereStatement: any = {}
@@ -212,7 +211,6 @@ export const buildWhereStatementForStation = (filter: string = '{}') => {
     return whereStatement
 }
 
-
 export const buildWhereStatementForLine = (filter: string = '{}') => {
     const parsedFilter = JSON.parse(filter)
     const whereStatement: any = {}
@@ -229,6 +227,5 @@ export const buildWhereStatementForLine = (filter: string = '{}') => {
 
     return whereStatement
 }
-
 
 export default stationService
