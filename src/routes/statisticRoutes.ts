@@ -6,9 +6,9 @@ import statisticController from '@/controllers/statisticController'
 
 const router = express.Router()
 
-router.get('/', verifyRoles([UserRole.ADMIN]), getStatisticValidation, statisticController.getSummaryStatistic)
-router.get('/popular', verifyRoles([UserRole.ADMIN]), getStatisticValidation, statisticController.getPopularStatistic)
-router.get('/revenue-chart', verifyRoles([UserRole.ADMIN]), getStatisticValidation, statisticController.getRevenuesChart)
-router.get('/origin-chart', verifyRoles([UserRole.ADMIN]), getStatisticValidation, statisticController.getOriginsChart)
+router.get('/', verifyRoles([UserRole.ADMIN, UserRole.STAFF]), getStatisticValidation, statisticController.getSummaryStatistic)
+router.get('/popular', verifyRoles([UserRole.ADMIN, UserRole.STAFF]), getStatisticValidation, statisticController.getPopularStatistic)
+router.get('/revenue-chart', verifyRoles([UserRole.ADMIN, UserRole.STAFF]), getStatisticValidation, statisticController.getRevenuesChart)
+router.get('/origin-chart', verifyRoles([UserRole.ADMIN, UserRole.STAFF]), getStatisticValidation, statisticController.getOriginsChart)
 
 export default router

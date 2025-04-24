@@ -2,6 +2,7 @@ import nodemailer, { SendMailOptions } from 'nodemailer'
 import forgotPasswordTemplate from '@/templates/forgotPassword'
 import googleRegistrationTemplate from '@/templates/googleRegistration'
 import welcomeNewStaffTemplate from '@/templates/welcomeNewStaff'
+import welcomeNewAdminTemplate from '@/templates/welcomeNewAdmin'
 
 const transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -75,6 +76,23 @@ const mailerService = {
                 fullName: fullName,
                 workingDate: workingDate,
                 station: station,
+                username: username,
+                password: password,
+                changePasswordUrl: changePasswordUrl
+            })
+        }
+        return await sendEmail(mailOptions)
+    },
+
+    sendWelcomeNewAdminMail: async (emailTo: string, fullName: string, username: string, password: string, changePasswordUrl: string) => {
+        const title = 'HCMC Metro - Chào mừng admin mới'
+        const mailOptions = {
+            from: process.env.GOOGLE_EMAIL,
+            to: emailTo,
+            subject: title,
+            html: welcomeNewAdminTemplate({
+                title: title,
+                fullName: fullName,
                 username: username,
                 password: password,
                 changePasswordUrl: changePasswordUrl
