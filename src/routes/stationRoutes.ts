@@ -6,6 +6,7 @@ const router = express.Router()
 
 router.get('/metro-lines', stationController.getLines)
 router.get('/metro-stations', stationController.getStations)
+router.get('/search', stationController.searchStations)
 router.get('/metro-path', getPathValidation, stationController.getPathBetweenStations)
 router.get('/metro-path-enriched', getPathValidation, stationController.getEnrichedPathBetweenStations)
 

@@ -14,6 +14,7 @@ import customerRoutes from '@/routes/customerRoutes'
 import personnelRoutes from '@/routes/personnelRoutes'
 import fileRoutes from '@/routes/fileRoutes'
 import stationRoutes from '@/routes/stationRoutes'
+import lineRoutes from '@/routes/lineRoutes'
 import issuedTicketRoutes from '@/routes/issuedTicketRoutes'
 import ticketRoutes from '@/routes/ticketRoutes'
 import tripRoutes from '@/routes/tripRoutes'
@@ -40,6 +41,7 @@ const baseRouter = express.Router()
 baseRouter.use('/auth', authRoutes)
 baseRouter.use('/files', fileRoutes)
 baseRouter.use('/stations', stationRoutes)
+baseRouter.use('/lines', lineRoutes)
 baseRouter.use('/prices', priceRoutes)
 baseRouter.use('/customers', customerRoutes)
 baseRouter.use('/personnel', personnelRoutes)

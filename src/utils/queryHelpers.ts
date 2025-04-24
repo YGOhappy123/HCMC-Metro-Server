@@ -61,6 +61,11 @@ export const buildWhereStatement = (filter: string = '{}') => {
                 case 'phoneNumber':
                     whereStatement.phoneNumber = { [Op.like]: `%${parsedFilter[criteria]}%` }
                     break
+                case 'stationName':
+                    whereStatement.stationName = { [Op.like]: `%${parsedFilter[criteria]}%` }
+                    break
+                case 'location':
+                    whereStatement.location = { [Op.like]: `%${parsedFilter[criteria]}%` }
                 case 'payments':
                     if ([true, 'true', 1].includes(parsedFilter[criteria])) {
                         whereStatement.paymentTime = { [Op.ne]: null }
