@@ -170,15 +170,5 @@ Thanks to the following people for contributing to this project ✨:
                 <sub><b>NgocYenDg</b></sub>
             </a>
         </td>
-        <td align="center">
-            <a href="https://github.com/tienanh443">
-                <img 
-                    src="https://avatars.githubusercontent.com/u/125814106?v=4"
-                    alt="tienanh443" width="100px;" height="100px;" 
-                    style="border-radius: 4px; background: #fff;"
-                /><br />
-                <sub><b>tienanh443</b></sub>
-            </a>
-        </td>
     </tr>
 </table>
