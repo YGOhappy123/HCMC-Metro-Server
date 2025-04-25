@@ -102,5 +102,5 @@ export default class IssuedSubscriptionTicket extends Model<IssuedSubscriptionTi
     declare expiredAt: Date
 
     @HasMany(() => Trip, 'subscriptionTicketId')
-    declare trips: Trip
+    declare trips: Trip[]
 }
