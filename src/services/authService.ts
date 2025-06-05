@@ -27,35 +27,33 @@ const authService = {
 
         let userData: any = null
         let userId: number | null = null
+        let userRole: UserRole | null = null
 
-        switch (account.role) {
-            case UserRole.CUSTOMER:
-                const customer = await Customer.findOne({ where: { accountId: account.accountId } })
-                if (customer) {
-                    userId = customer.customerId
-                    userData = customer.toJSON()
-                    delete userData.customerId
-                    delete userData.accountId
-                }
-                break
-            case UserRole.STAFF:
-                const staff = await Staff.findOne({ where: { accountId: account.accountId } })
-                if (staff) {
-                    userId = staff.staffId
-                    userData = staff.toJSON()
-                    delete userData.staffId
-                    delete userData.accountId
-                }
-                break
-            case UserRole.ADMIN:
-                const admin = await Admin.findOne({ where: { accountId: account.accountId } })
-                if (admin) {
-                    userId = admin.adminId
-                    userData = admin.toJSON()
-                    delete userData.adminId
-                    delete userData.accountId
-                }
-                break
+        const customer = await Customer.findOne({ where: { accountId: account.accountId } })
+        if (customer) {
+            const { customerId, accountId, ...customerData } = customer.toJSON()
+
+            userId = customerId
+            userData = customerData
+            userRole = UserRole.CUSTOMER
+        }
+
+        const staff = !userId && (await Staff.findOne({ where: { accountId: account.accountId } }))
+        if (staff) {
+            const { staffId, accountId, ...staffData } = staff.toJSON()
+
+            userId = staffId
+            userData = staffData
+            userRole = UserRole.STAFF
+        }
+
+        const admin = !userId && (await Admin.findOne({ where: { accountId: account.accountId } }))
+        if (admin) {
+            const { adminId, accountId, ...adminData } = admin.toJSON()
+
+            userId = adminId
+            userData = adminData
+            userRole = UserRole.ADMIN
         }
 
         if (!userData) throw new HttpException(404, errorMessage.USER_NOT_FOUND)
@@ -63,9 +61,9 @@ const authService = {
             user: {
                 ...userData,
                 userId: userId,
-                role: account.role
+                role: userRole
             },
-            accessToken: generateAccessToken({ userId: userId!, role: account.role }),
+            accessToken: generateAccessToken({ userId: userId!, role: userRole! }),
             refreshToken: generateRefreshToken({ accountId: account.accountId })
         }
     },
@@ -104,30 +102,28 @@ const authService = {
         if (!account || !account.isActive) throw new HttpException(404, errorMessage.USER_NOT_FOUND)
 
         let userId: number | null = null
-        switch (account.role) {
-            case UserRole.CUSTOMER:
-                const customer = await Customer.findOne({ where: { accountId: account.accountId }, attributes: ['customerId'] })
-                if (customer) {
-                    userId = customer.customerId
-                }
-                break
-            case UserRole.STAFF:
-                const staff = await Staff.findOne({ where: { accountId: account.accountId }, attributes: ['staffId'] })
-                if (staff) {
-                    userId = staff.staffId
-                }
-                break
-            case UserRole.ADMIN:
-                const admin = await Admin.findOne({ where: { accountId: accountId }, attributes: ['adminId'] })
-                if (admin) {
-                    userId = admin.adminId
-                }
-                break
+        let userRole: UserRole | null = null
+
+        const customer = await Customer.findOne({ where: { accountId: account.accountId }, attributes: ['customerId'] })
+        if (customer) {
+            userId = customer.customerId
+            userRole = UserRole.CUSTOMER
+        }
+
+        const staff = !userId && (await Staff.findOne({ where: { accountId: account.accountId }, attributes: ['staffId'] }))
+        if (staff) {
+            userId = staff.staffId
+            userRole = UserRole.STAFF
+        }
+
+        const admin = !userId && (await Admin.findOne({ where: { accountId: accountId }, attributes: ['adminId'] }))
+        if (admin) {
+            userId = admin.adminId
         }
 
         if (!userId) throw new HttpException(404, errorMessage.USER_NOT_FOUND)
         return {
-            accessToken: generateAccessToken({ userId: userId, role: account.role })
+            accessToken: generateAccessToken({ userId: userId, role: userRole! })
         }
     },
 
