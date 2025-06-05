@@ -57,8 +57,7 @@ const personnelService = {
 
         const newAccount = await Account.create({
             username: randomUsername,
-            password: randomPassword,
-            role: UserRole.STAFF
+            password: randomPassword
         })
 
         await Staff.create({
@@ -170,8 +169,7 @@ const personnelService = {
 
         const newAccount = await Account.create({
             username: randomUsername,
-            password: randomPassword,
-            role: UserRole.ADMIN
+            password: randomPassword
         })
 
         await Admin.create({

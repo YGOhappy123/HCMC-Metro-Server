@@ -2,7 +2,6 @@ import * as bcrypt from 'bcrypt'
 import { Optional } from 'sequelize'
 import { Column, DataType, HasOne, Model, Table } from 'sequelize-typescript'
 import { HttpException } from '@/errors/HttpException'
-import { UserRole } from '@/enums/auth'
 import errorMessage from '@/configs/errorMessage'
 import Customer from '@/models/Customer'
 import Staff from '@/models/Staff'
@@ -12,11 +11,10 @@ interface AccountAttributes {
     accountId: number
     username: string
     password: string
-    role: UserRole
     isActive: boolean
 }
 
-type CreateAccountAttributes = Optional<AccountAttributes, 'accountId' | 'role' | 'isActive'>
+type CreateAccountAttributes = Optional<AccountAttributes, 'accountId' | 'isActive'>
 
 const USERNAME_LENGTH_RANGE = [8, 20] as const
 const PASSWORD_LENGTH_RANGE = [8, 20] as const
@@ -57,13 +55,6 @@ export default class Account extends Model<AccountAttributes, CreateAccountAttri
         }
     })
     declare password: string
-
-    @Column({
-        type: DataType.ENUM(...Object.values(UserRole)),
-        allowNull: false,
-        defaultValue: UserRole.CUSTOMER
-    })
-    declare role: UserRole
 
     @Column({
         type: DataType.BOOLEAN,
