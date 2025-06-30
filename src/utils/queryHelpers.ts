@@ -14,7 +14,9 @@ export const buildWhereStatement = (filter: string = '{}') => {
                     break
                 case 'endTime':
                     whereStatement.createdAt = whereStatement.createdAt || {}
-                    whereStatement.createdAt[Op.lte] = parseTime(parsedFilter[criteria] + ' 23:59:59')
+                    whereStatement.createdAt[Op.lte] = parseTime(
+                        parsedFilter[criteria].trim().length > 10 ? parsedFilter[criteria] : parsedFilter[criteria] + ' 23:59:59'
+                    )
                     break
                 case 'startIssuedTime':
                     whereStatement.issuedAt = whereStatement.issuedAt || {}
@@ -22,7 +24,9 @@ export const buildWhereStatement = (filter: string = '{}') => {
                     break
                 case 'endIssuedTime':
                     whereStatement.issuedAt = whereStatement.issuedAt || {}
-                    whereStatement.issuedAt[Op.lte] = parseTime(parsedFilter[criteria] + ' 23:59:59')
+                    whereStatement.issuedAt[Op.lte] = parseTime(
+                        parsedFilter[criteria].trim().length > 10 ? parsedFilter[criteria] : parsedFilter[criteria] + ' 23:59:59'
+                    )
                     break
                 case 'startEntryTime':
                     whereStatement.entryTime = whereStatement.entryTime || {}
@@ -30,7 +34,9 @@ export const buildWhereStatement = (filter: string = '{}') => {
                     break
                 case 'endEntryTime':
                     whereStatement.entryTime = whereStatement.entryTime || {}
-                    whereStatement.entryTime[Op.lte] = parseTime(parsedFilter[criteria] + ' 23:59:59')
+                    whereStatement.entryTime[Op.lte] = parseTime(
+                        parsedFilter[criteria].trim().length > 10 ? parsedFilter[criteria] : parsedFilter[criteria] + ' 23:59:59'
+                    )
                     break
                 case 'startExitTime':
                     whereStatement.exitTime = whereStatement.exitTime || {}
@@ -38,7 +44,9 @@ export const buildWhereStatement = (filter: string = '{}') => {
                     break
                 case 'endExitTime':
                     whereStatement.exitTime = whereStatement.exitTime || {}
-                    whereStatement.exitTime[Op.lte] = parseTime(parsedFilter[criteria] + ' 23:59:59')
+                    whereStatement.exitTime[Op.lte] = parseTime(
+                        parsedFilter[criteria].trim().length > 10 ? parsedFilter[criteria] : parsedFilter[criteria] + ' 23:59:59'
+                    )
                     break
                 case 'startHireTime':
                     whereStatement.hireDate = whereStatement.hireDate || {}
@@ -46,7 +54,9 @@ export const buildWhereStatement = (filter: string = '{}') => {
                     break
                 case 'endHireTime':
                     whereStatement.hireDate = whereStatement.hireDate || {}
-                    whereStatement.hireDate[Op.lte] = parseTime(parsedFilter[criteria] + ' 23:59:59')
+                    whereStatement.hireDate[Op.lte] = parseTime(
+                        parsedFilter[criteria].trim().length > 10 ? parsedFilter[criteria] : parsedFilter[criteria] + ' 23:59:59'
+                    )
                     break
                 case 'isActive':
                 case 'isWorking':

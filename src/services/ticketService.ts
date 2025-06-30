@@ -58,7 +58,7 @@ const ticketService = {
     },
 
     sellSingleJourneyTicket: async (staffId: number, entryStationId: number, exitStationId: number, quantity: number, method: PaymentMethod) => {
-        const path = await stationService.getPathBetweenStations(entryStationId, exitStationId, PaymentMethod.DIGITAL_WALLET)
+        const path = await stationService.getPathBetweenStations(entryStationId, exitStationId, method)
         if (path.length === 0) throw new HttpException(400, errorMessage.NO_AVAILABLE_PATH)
 
         const staff = await Staff.findByPk(staffId)
